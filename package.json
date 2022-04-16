@@ -1,6 +1,8 @@
 {
   "devDependencies": {
+    "jest": "^27.5.1",
     "prettier": "^2.6.2",
+    "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.6.3"
@@ -9,8 +11,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prebuild": "rimraf lib",
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "test": "jest --config jest.config.ts",
+    "coverage": "jest --config jest.config.ts --coverage",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json"
   },
   "keywords": [
@@ -20,14 +25,18 @@
     "bulk-sms",
     "check-balance"
   ],
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "repository": "git@github.com:Kairos-Afrika/sms-node.git",
   "author": "Lord Kay <offeilord@gmail.com>",
   "license": "MIT",
   "homepage": "https://kairosafrika.com",
   "dependencies": {
+    "@types/jest": "^27.4.1",
     "axios": "^0.26.1",
     "axios-observable": "^1.4.0",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "ts-jest": "^27.1.4"
   }
 }
