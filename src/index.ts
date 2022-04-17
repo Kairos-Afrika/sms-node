@@ -15,7 +15,7 @@ class KairosSMS {
    * @type ISMSBody
    * @param body
    */
-  send(body: ISingleSMSBody | IBulkSMSBody): SendSms {
+  send(body: ISingleSMSBody | IBulkSMSBody | string): SendSms {
     return new SendSms(this.options, body);
   }
 }
