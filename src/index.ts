@@ -1,7 +1,5 @@
-import { IKairosSMSOptions } from './types/interfaces';
-import { Api } from './api';
-import { AxiosObservable } from 'axios-observable';
-import { APIEndpoints } from './constants/api-endpoints.constants';
+import { IBulkSMSBody, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
+import { SendSms } from './services/send-sms';
 
 class KairosSMS {
   private readonly options: IKairosSMSOptions;
@@ -12,8 +10,13 @@ class KairosSMS {
     return new KairosSMS(options);
   }
 
-  send<T>(body: T): AxiosObservable<any> {
-    return Api(this.options).post(APIEndpoints.SEND_QUICK_SMS, {});
+  /**
+   * Defined method for handling the sending of  sms
+   * @type ISMSBody
+   * @param body
+   */
+  send(body: ISingleSMSBody | IBulkSMSBody): SendSms {
+    return new SendSms(this.options, body);
   }
 }
 
@@ -21,3 +24,4 @@ export default KairosSMS;
 export { KairosSMS };
 
 const lord = KairosSMS.create({ apiKey: 'xxxxx', apiSecret: 'xxxxx' });
+const response = lord.send({ to: '', message: '', from: '' }).asQuick();
