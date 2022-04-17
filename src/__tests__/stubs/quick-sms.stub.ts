@@ -1,7 +1,7 @@
-import { ISMSBody } from '../../types/interfaces';
+import { ISingleSMSBody } from '../../types/interfaces';
 import { QuickSMSBody, SMSResponse } from '../mocks/mocks';
 
-export const QuickSmsStub = (): ISMSBody => {
+export const QuickSmsStub = (): ISingleSMSBody => {
   return QuickSMSBody;
 };
 
