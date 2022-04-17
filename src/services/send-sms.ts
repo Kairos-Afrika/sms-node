@@ -58,6 +58,24 @@ class SendSms {
       );
   }
 
+  asQuickMultipleMSISDN() {
+    return Api(this.options)
+      .post(APIEndpoints.SEND_QUICK_MULTIPLE_MSISDN, this.data as ISingleSMSBody)
+      .pipe(
+        map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS successfully scheduled`, response?.data, true)),
+        catchError((err) =>
+          of(
+            buildSMSResponse(
+              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.data?.message,
+              err,
+              false,
+            ),
+          ),
+        ),
+      );
+  }
+
   /**
    * Send sms as bulk sms
    */

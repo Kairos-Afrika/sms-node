@@ -8,6 +8,7 @@ jest.mock('../services/send-sms', () => {
     SendSms: jest.fn().mockImplementation(() => {
       return {
         asQuick: () => jest.fn(),
+        asQuickMultipleMSISDN: () => jest.fn(),
         asPing: () => jest.fn(),
         asBulk: () => jest.fn(),
       };

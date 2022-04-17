@@ -32,4 +32,3 @@ export default KairosSMS;
 export { KairosSMS };
 
 const lord = KairosSMS.create({ apiKey: 'xxxxx', apiSecret: 'xxxxx' });
-const response = lord.account().balance();
