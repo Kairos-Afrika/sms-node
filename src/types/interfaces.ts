@@ -17,7 +17,7 @@ export interface IKairosSMSOptions {
   timeout?: number;
 }
 
-export interface ISMSBody {
+interface ISMSBody {
   /**
    * MSISDN
    * @description Contact number of which the message is to be sent to
@@ -43,4 +43,24 @@ export interface ISMSBody {
   type?: ISMSType;
 }
 
+/**
+ * Types of sms
+ */
 type ISMSType = 'Quick' | 'Flash';
+
+/**
+ * Generic API Call Response
+ */
+export interface IResponse<T> {
+  statusCode: number | string;
+  statusMessage: string;
+  timestamp: string;
+  success: boolean;
+  data: T;
+}
+
+export type ISingleSMSBody = Pick<ISMSBody, 'to' | 'from' | 'message'>;
+
+export interface IBulkSMSBody {
+  messages: ReadonlyArray<Pick<ISMSBody, 'to' | 'from' | 'message'>>;
+}
