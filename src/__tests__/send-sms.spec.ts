@@ -7,12 +7,12 @@ jest.mock('../services/send-sms', () => {
   return {
     SendSms: jest.fn().mockImplementation(() => {
       return {
-        asQuick:() => jest.fn(),
-        asPing:() => jest.fn(),
-        asBulk: () => jest.fn()
-      }
-    })
-  }
+        asQuick: () => jest.fn(),
+        asPing: () => jest.fn(),
+        asBulk: () => jest.fn(),
+      };
+    }),
+  };
 });
 
 describe('Send SMS', function () {
