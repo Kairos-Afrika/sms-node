@@ -1,5 +1,6 @@
 import { IBulkSMSBody, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
 import { SendSms } from './services/send-sms';
+import { Account } from './services/account';
 
 class KairosSMS {
   private readonly options: IKairosSMSOptions;
@@ -8,6 +9,13 @@ class KairosSMS {
   }
   static create(options: IKairosSMSOptions) {
     return new KairosSMS(options);
+  }
+
+  /**
+   * Defined method for handling checking of account balance and other related acc activities
+   */
+  account(): Account {
+    return new Account(this.options);
   }
 
   /**
@@ -24,4 +32,4 @@ export default KairosSMS;
 export { KairosSMS };
 
 const lord = KairosSMS.create({ apiKey: 'xxxxx', apiSecret: 'xxxxx' });
-const response = lord.send({ to: '', message: '', from: '' }).asQuick();
+const response = lord.account().balance();
