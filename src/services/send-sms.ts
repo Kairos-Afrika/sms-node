@@ -4,7 +4,6 @@ import { APIEndpoints } from '../constants/api-endpoints.constants';
 import { catchError, map, Observable, of } from 'rxjs';
 import { buildSMSResponse } from '../utils/helpers';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
-import * as Http from 'http';
 
 class SendSms {
   /**
