@@ -46,7 +46,7 @@ interface ISMSBody {
 /**
  * Types of sms
  */
-type ISMSType = 'Quick' | 'Flash';
+type ISMSType = 'Quick';
 
 /**
  * Generic API Call Response
@@ -59,8 +59,8 @@ export interface IResponse<T> {
   data: T;
 }
 
-export type ISingleSMSBody = Pick<ISMSBody, 'to' | 'from' | 'message'>;
+export type ISingleSMSBody = ISMSBody;
 
 export interface IBulkSMSBody {
-  messages: ReadonlyArray<Pick<ISMSBody, 'to' | 'from' | 'message'>>;
+  messages: ReadonlyArray<ISMSBody>;
 }
