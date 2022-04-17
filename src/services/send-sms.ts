@@ -23,7 +23,7 @@ class SendSms {
    * @param options
    * @param data
    */
-  constructor(options: IKairosSMSOptions, data: ISingleSMSBody | IBulkSMSBody) {
+  constructor(options: IKairosSMSOptions, data: ISingleSMSBody | IBulkSMSBody | string) {
     this.options = options;
     this.data = data;
   }
@@ -32,6 +32,16 @@ class SendSms {
    * Send the sms as a quick one
    */
   asQuick(): Observable<IResponse<any>> {
+    if (typeof this.data !== 'object') {
+      of(
+        buildSMSResponse(
+          HttpStatusCode.BAD_REQUEST,
+          'Invalid request body passed',
+          { message: 'Request body must be an object' },
+          false,
+        ),
+      );
+    }
     return Api(this.options)
       .post(APIEndpoints.SEND_QUICK_SMS, this.data as ISingleSMSBody)
       .pipe(
@@ -53,10 +63,54 @@ class SendSms {
    * Send sms as bulk sms
    */
   asBulk(): Observable<IResponse<any>> {
+    if (
+      !Object(this.data as IBulkSMSBody).hasOwnProperty('messages') ||
+      !Array.isArray((this.data as IBulkSMSBody)?.messages)
+    ) {
+      return of(
+        buildSMSResponse(
+          HttpStatusCode.BAD_REQUEST,
+          'Invalid request body passed',
+          { message: 'Request body must be an array' },
+          false,
+        ),
+      );
+    }
     return Api(this.options)
       .post(APIEndpoints.SEND_BULK_SMS, this.data as IBulkSMSBody)
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `Bulk SMS successfully scheduled`, response?.data, true)),
+        catchError((err) =>
+          of(
+            buildSMSResponse(
+              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.data?.message,
+              err,
+              false,
+            ),
+          ),
+        ),
+      );
+  }
+
+  /**
+   * Ping the status of a sent sms
+   */
+  asPing(): Observable<IResponse<any>> {
+    if (typeof this.data !== 'string') {
+      return of(
+        buildSMSResponse(
+          HttpStatusCode.BAD_REQUEST,
+          'Invalid path params passed',
+          { message: 'URl accept the id of sent message' },
+          false,
+        ),
+      );
+    }
+    return Api(this.options)
+      .get(APIEndpoints.PING_SMS_STATUS.replace('{sms_id}', this.data as string))
+      .pipe(
+        map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS response details`, response?.data, true)),
         catchError((err) =>
           of(
             buildSMSResponse(
