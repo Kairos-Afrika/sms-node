@@ -1,4 +1,4 @@
-name: Kairos Afrika SMS NPM Package
+name: Kairos Afrika
 on:
   push:
     branches:
