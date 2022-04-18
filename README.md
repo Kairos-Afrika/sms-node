@@ -12,11 +12,11 @@ A kairos afrika NPM wrapper that exposes all the apis making integration into yo
 ### Installation
 Quickly use the package by running either of the below commands
 ```bash
-npm i @kairos/sms-node
+npm i @kairos/sms
 ```
 or
 ```bash
-yarn add @kairos/sms-node
+yarn add @kairos/sms
 ```
 ## Methods
 After installation is complete, package exposes all these available methods to allow developers to quickly start integration
