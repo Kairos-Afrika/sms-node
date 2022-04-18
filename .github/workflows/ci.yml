@@ -1,4 +1,4 @@
-name: Kairos Afrika
+name: CI
 on:
   push:
     branches:
