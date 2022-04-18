@@ -1,4 +1,4 @@
-import {IBalance, ISingleSMSBody} from '../../types/interfaces';
+import { IBalance, ISingleSMSBody } from '../../types/interfaces';
 
 export const AxiosConfigOptions = {
   baseURL: 'https://testing.com',

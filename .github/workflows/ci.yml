@@ -1,0 +1,31 @@
+name: Kairos Afrika SMS NPM Package
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ["12.x","14.x","16.x"]
+
+    steps:
+      - name: Checkout Package Codes
+        uses: actions/checkout@v2
+
+      - name: Install Node JS ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
+      - name: Install Package Deps.
+        run: yarn install --production
+
+      - name: Linting & Formatting
+        run: yarn run lint && yarn run format
+
+      - name: Running Tests
+        run: yarn run test

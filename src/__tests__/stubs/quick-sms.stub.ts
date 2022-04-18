@@ -1,4 +1,4 @@
-import {IBalance, ISingleSMSBody} from '../../types/interfaces';
+import { IBalance, ISingleSMSBody } from '../../types/interfaces';
 import { QuickSMSBody, SMSAccountBalance, SMSResponse } from '../mocks/mocks';
 
 export const QuickSmsStub = (): ISingleSMSBody => {

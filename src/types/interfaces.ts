@@ -72,7 +72,7 @@ export interface IBalance {
   id: string | number;
   credit: number | string;
   totalAmount: number | string;
-  userId: IUser
+  userId: IUser;
 }
 
 /**
@@ -80,7 +80,7 @@ export interface IBalance {
  */
 export interface IUser {
   id: string | number;
-  username: string | null
+  username: string | null;
   name: string;
-  phone: string
+  phone: string;
 }
