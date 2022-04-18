@@ -22,7 +22,7 @@ jobs:
           cache: yarn
 
       - name: Install Package Deps.
-        run: yarn install --production
+        run: yarn install
 
       - name: Linting & Formatting
         run: yarn run lint && yarn run format
