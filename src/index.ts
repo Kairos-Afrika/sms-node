@@ -3,9 +3,9 @@ import { SendSms } from './services/send-sms';
 import { Account } from './services/account';
 
 class KairosSMS {
-  private readonly options: IKairosSMSOptions;
-  constructor(options: IKairosSMSOptions) {
-    this.options = options;
+  private readonly config: IKairosSMSOptions;
+  constructor(config: IKairosSMSOptions) {
+    this.config = config;
   }
   static create(options: IKairosSMSOptions) {
     return new KairosSMS(options);
@@ -15,7 +15,7 @@ class KairosSMS {
    * Defined method for handling checking of account balance and other related acc activities
    */
   account(): Account {
-    return new Account(this.options);
+    return new Account(this.config);
   }
 
   /**
@@ -24,11 +24,26 @@ class KairosSMS {
    * @param body
    */
   send(body: ISingleSMSBody | IBulkSMSBody | string): SendSms {
-    return new SendSms(this.options, body);
+    return new SendSms(this.config, body);
+  }
+
+  /**
+   * Static definitions for account balance checker
+   * @param config
+   */
+  static account(config: IKairosSMSOptions): Account {
+    return new Account(config);
+  }
+
+  /**
+   * Static definitions for sending of sms
+   * @param config
+   * @param body
+   */
+  static send(config: IKairosSMSOptions, body: ISingleSMSBody | IBulkSMSBody | string): SendSms {
+    return new SendSms(config, body);
   }
 }
 
 export default KairosSMS;
 export { KairosSMS };
-
-const lord = KairosSMS.create({ apiKey: 'xxxxx', apiSecret: 'xxxxx' });
