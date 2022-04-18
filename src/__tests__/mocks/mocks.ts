@@ -1,4 +1,4 @@
-import { ISingleSMSBody } from '../../types/interfaces';
+import {IBalance, ISingleSMSBody} from '../../types/interfaces';
 
 export const AxiosConfigOptions = {
   baseURL: 'https://testing.com',
@@ -16,7 +16,7 @@ export const QuickSMSBody: ISingleSMSBody = {
   message: 'This is a testing message',
 };
 
-export const BulkSMSBody: ReadonlyArray<ISingleSMSBody> = [QuickSMSBody];
+export const BulkSMSBody: { messages: ReadonlyArray<ISingleSMSBody> } = { messages: [QuickSMSBody] };
 
 export const SMSResponse = {
   statusCode: 200,
@@ -24,4 +24,16 @@ export const SMSResponse = {
   data: true,
   timestamp: new Date().toISOString(),
   success: true,
+};
+
+export const SMSAccountBalance: IBalance = {
+  id: 2,
+  credit: '8',
+  totalAmount: '0',
+  userId: {
+    id: 7,
+    name: 'New User',
+    username: null,
+    phone: '0200384773',
+  },
 };

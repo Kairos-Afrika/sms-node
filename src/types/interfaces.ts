@@ -64,3 +64,23 @@ export type ISingleSMSBody = ISMSBody;
 export interface IBulkSMSBody {
   messages: ReadonlyArray<ISMSBody>;
 }
+
+/**
+ * Account balance type definition
+ */
+export interface IBalance {
+  id: string | number;
+  credit: number | string;
+  totalAmount: number | string;
+  userId: IUser
+}
+
+/**
+ * User type definition
+ */
+export interface IUser {
+  id: string | number;
+  username: string | null
+  name: string;
+  phone: string
+}

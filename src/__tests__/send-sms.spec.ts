@@ -1,7 +1,8 @@
 import { SendSms } from '../services/send-sms';
-import { KairosConfigOptions, QuickSMSBody } from './mocks/mocks';
+import { BulkSMSBody, KairosConfigOptions, QuickSMSBody } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
 import { SMSResponseStub } from './stubs/quick-sms.stub';
+import { HttpStatusCode } from '../constants/http-status-code.constants';
 
 jest.mock('../services/send-sms', () => {
   return {
@@ -49,6 +50,32 @@ describe('Send SMS', function () {
       expect(response.data).toHaveProperty(['message']);
       expect(response.data.message).toBe('Account is low on credit');
       expect(response.statusCode).toBe(403);
+    });
+
+    it('should return a bad request', async () => {
+      jest.spyOn(sendSmsInstance, 'asBulk').mockImplementation(() => {
+        return of(SMSResponseStub(HttpStatusCode.BAD_REQUEST, { message: 'Request body must be an array' }, false));
+      });
+      const response = await lastValueFrom(sendSmsInstance.asBulk());
+      expect(response).toBeDefined();
+      expect(response.data.message).toBe('Request body must be an array');
+      expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
+    });
+  });
+
+  describe('SMS Bulk Requests', function () {
+    beforeEach(() => {
+      sendSmsInstance = new SendSms(KairosConfigOptions, BulkSMSBody);
+    });
+
+    it('should return a successful response for bulk sms', async () => {
+      jest.spyOn(sendSmsInstance, 'asBulk').mockImplementation(() => {
+        return of(SMSResponseStub(HttpStatusCode.OK, true, true));
+      });
+      const response = await lastValueFrom(sendSmsInstance.asBulk());
+      expect(response).toBeDefined();
+      expect(response.data).toBeTruthy();
+      expect(response.statusCode).toBe(HttpStatusCode.OK);
     });
   });
 
