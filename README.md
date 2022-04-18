@@ -20,4 +20,8 @@ yarn add @kairos/sms-node
 ```
 ## Methods
 After installation is complete, package exposes all these available methods to allow developers to quickly start integration
-
+### send()
+#### asQuick()
+#### asBulk()
+#### asQuickMultipleMSISDN()
+#### asPing()
