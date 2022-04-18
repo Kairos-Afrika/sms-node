@@ -8,6 +8,7 @@ const config: Config.InitialOptions = {
     testRegex: "(/__tests__/ .*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     transformIgnorePatterns: ['node_modules/(?!variables/.*)'],
     moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
+    moduleDirectories: ["node_modules"],
     testTimeout: 30000,
 };
 
