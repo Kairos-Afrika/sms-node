@@ -29,3 +29,7 @@ jobs:
 
       - name: Running Tests
         run: yarn run test
+      - name: Submit Code Coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: yarn codecov

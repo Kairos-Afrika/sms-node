@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "codecov": "^3.8.3",
     "jest": "^27.5.1",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
@@ -15,6 +16,7 @@
     "build": "tsc",
     "test": "jest --config jest.config.ts",
     "coverage": "jest --config jest.config.ts --coverage",
+    "codecov": "codecov",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json"
   },
