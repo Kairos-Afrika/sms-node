@@ -1,8 +1,8 @@
 import * as ApiRequest from '../api';
-import Axios from 'axios-observable';
+import { Axios } from 'axios-observable';
 import { IKairosSMSOptions } from '../types/interfaces';
 
-jest.mock('Axios');
+jest.mock('axios');
 
 describe('Axios Instance', function () {
   beforeAll(() => {
