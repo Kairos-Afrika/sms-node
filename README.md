@@ -1,7 +1,7 @@
 # Kairos Bulk SMS Node 
 
 
-[ (https://img.shields.io/badge/Status-WIP-yellowgreen)](https://img.shields.io/badge/Status-WIP-yellowgreen)
+[![Dev Staus](https://img.shields.io/badge/Status-WIP-yellowgreen)](https://img.shields.io/badge/Status-WIP-yellowgreen)
 [![CI Status](https://github.com/Kairos-Afrika/sms-node/actions/workflows/ci.yml/badge.svg)](https://github.com/Kairos-Afrika/sms-node/actions/workflows/ci.yml)
 [![Code Coverage](https://badgen.net/codecov/c/github/vercel/nft)](https://codecov.io/gh/vercel/nft)
 
