@@ -30,7 +30,6 @@ jobs:
       - name: Running Tests
         run: yarn run test
       - name: Submit Code Coverage
-        if: matrix.node-version >= 14 && matrix.node-version <=16 #only run once
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: yarn codecov
