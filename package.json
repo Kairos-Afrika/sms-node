@@ -25,7 +25,10 @@
     "api",
     "quick-sms",
     "bulk-sms",
-    "check-balance"
+    "check-balance",
+    "rxjs",
+    "axios",
+    "axios-observable"
   ],
   "files": [
     "lib/**/*"
