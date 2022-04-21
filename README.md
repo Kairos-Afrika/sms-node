@@ -47,6 +47,14 @@ Find the request structure when making an API request for Quick SMS.
     "message": "this is a test message"
 }
 ```
+Find the request structure when making an API request for Quick SMS with multiple phone numbers or msisdns.
+```json
+{
+    "to": "233200746423,23094990599",
+    "from": "KAIROS",
+    "message": "this is a test message"
+}
+```
 Find the request structure when making an API request for Bulk SMS.
 ```json
 {
