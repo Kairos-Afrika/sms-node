@@ -190,7 +190,7 @@ After you've created the instance, you can then call the `account()` method,
 ```js
 const response = instance.account()
 ```
-Which exposes all the necessary methods below
+Which exposes the method below
 ##### balance()
 Get current user balance with this
 ```js
