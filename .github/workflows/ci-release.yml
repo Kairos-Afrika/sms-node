@@ -6,26 +6,6 @@ on:
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: ["16.x"]
-
-    steps:
-      - name: Checkout Package Codes
-        uses: actions/checkout@v2
-
-      - name: Install Node JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-      - run: yarn install --frozon-lockfile
-      - run: yarn run lint && yarn run format
-      - run: yarn run test
-
-  publish-npm:
-    name: Publish Package (NPM)
-    needs: build
     runs-on: ubuntu-latest
 
     strategy:
@@ -41,7 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
-          registry-url: https://registry.npmjs.org
+          registry-url: 'https://registry.npmjs.org/'
           scope: "@kairosafrika"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -55,23 +35,13 @@ jobs:
       - name: Running Tests
         run: yarn run test
 
-      - name: Publish Package
-        run: npm publish --access public
+      - name: Build the package
+        run: yarn run build
+
+      - name: Publish Package (NPM)
+        run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  publish-gpr:
-    name: Publish Package (GITHUB)
-    needs: build
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: ["16.x"]
-
-    steps:
-      - name: Checkout Package Codes
-        uses: actions/checkout@v2
 
       - name: Install Node JS ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -80,22 +50,10 @@ jobs:
           cache: yarn
           registry-url: 'https://npm.pkg.github.com'
           scope: "@Kairos-Afrika"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
 
       - name: Authenticate with the GitHub Package Registry
         run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GPR_TOKEN }}" > ~/.npmrc
 
-      - name: Install Package Deps.
-        run: yarn install --frozon-lockfile
-
-      - name: Linting & Formatting
-        run: yarn run lint && yarn run format
-
-      - name: Running Tests
-        run: yarn run test
-
-      - name: Publish Package
-        run: npm publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
