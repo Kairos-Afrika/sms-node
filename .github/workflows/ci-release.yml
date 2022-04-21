@@ -42,18 +42,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Install Node JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: yarn
-          registry-url: 'https://npm.pkg.github.com'
-          scope: "@Kairos-Afrika"
-
-      - name: Authenticate with the GitHub Package Registry
-        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GPR_TOKEN }}" > ~/.npmrc
-
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
