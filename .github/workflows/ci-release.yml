@@ -52,8 +52,8 @@ jobs:
           scope: "@Kairos-Afrika"
 
       - name: Authenticate with the GitHub Package Registry
-        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GRP_TOKEN }}" > ~/.npmrc
+        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GPR_TOKEN }}" > ~/.npmrc
 
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GRP_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
