@@ -13,7 +13,9 @@ A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs m
 - [Request Structure](#request-structure)
 - [Response Structure](#response-structure)
 - [Example](#example)
+- [Kairos SMS API](#kairos-sms-api)
 - [Creating an instance](#creating-an-instance)
+- [Instance methods](#instance-methods)
 
 ## Features
 - Send Quick SMS 
@@ -125,11 +127,48 @@ async function sendSMS() {
     console.log(response)
 }
 ```
-## Creating an instance
-## Methods
-After installation is complete, package exposes all these available methods to allow developers to quickly start integration
-### send()
-#### asQuick()
-#### asBulk()
-#### asQuickMultipleMSISDN()
-#### asPing()
+## Kairos SMS API
+
+Requests can be made by passing the relevant configs to `KairosSMS.create()`
+
+### Creating an instance
+
+You can create an instance of KairosSMS with the relevant configs
+
+#### KairosSMS.create([config])
+```js
+const instance = KairosSMS.create({ 
+    apiKey: 'xxxxxxxxxxx', 
+    apiSecret: 'xxxxxxxxxx', 
+    timeout: 800000
+})
+```
+### Instance Methods
+There are two main available instance methods that exposes other important methods, This includes
+```html
+
+```
+| Method             | description             |
+|--------------------|-------------------------|
+| send(data)         | called when you want to send sms or check the current status of an already sent sms
+| account()          | called when you want to check the account balance
+
+#### Send(data)
+After you've created the instance, you can then call the `send(data)` method,
+```js
+const response = instance.send(data)
+```
+Which exposes all the necessary methods below
+##### asQuick()
+##### asBulk()
+##### asQuickMultipleMSISDN()
+##### asPing()
+
+#### Account()
+After you've created the instance, you can then call the `account()` method,
+```js
+const response = instance.account()
+```
+Which exposes all the necessary methods below
+##### balance()
+
