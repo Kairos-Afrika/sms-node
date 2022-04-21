@@ -160,6 +160,10 @@ Which exposes all the necessary methods below
 ##### asBulk()
 ##### asQuickMultipleMSISDN()
 This method allows customer to send same message to multiple msisdns or phone numbers by using a comma separated values for the `to` property in the request object at [Request Structure](#request-structure)
+```text
+  "to":"233200746423,23094990599"
+```
+Example
 ```js
 response
     .asQuickMultipleMSISDN()
@@ -167,9 +171,6 @@ response
         // handle response here
         console.log(data)
     })
-```
-```text
-  "to":"233200746423,23094990599"
 ```
 ##### asPing()
 This method is a bit different because it accepts the `id`  of the sent sms instead of an object to make the request.
