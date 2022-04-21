@@ -16,17 +16,28 @@ A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs m
 - [Creating an instance](#creating-an-instance)
 
 ## Features
+- Send Quick SMS 
+- Send Bulk SMS
+- Ping the status of an already sent SMS
+- Check your account balance
+- Provides method chaining under-the-hood
+- Supports typescript from the get-go
+- Unsubscribed to method calls with the `unsubscribe()` method from `rxjs`
+
 ### Installation
 Quickly use the package by running either of the below commands
+
+Using npm:
 ```bash
 npm i @kairos/sms
 ```
 or
+Using yarn:
 ```bash
 yarn add @kairos/sms
 ```
-## Request Structure
-Find the request structure when making an API request.
+### Request Structure
+Find the request structure when making an API request for Quick SMS.
 ```json
 {
     "to": "xxxxxxxxx",
@@ -34,7 +45,21 @@ Find the request structure when making an API request.
     "message": "this is a test message"
 }
 ```
-## Response Structure
+Find the request structure when making an API request for Bulk SMS.
+```json
+{
+  "messages": [
+    {
+      "to": "233200746417",
+      "from": "Kairos Test",
+      "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "type": "Quick"
+    }
+  ]
+}
+
+```
+### Response Structure
 Find the response structure when a successful or failed response is returned
 
 ```json
@@ -47,7 +72,7 @@ Find the response structure when a successful or failed response is returned
 }
 ```
 ## Example
-> Note: This package is implemented in typescript hence to need to install typings
+> Note: This package is implemented in typescript hence no need to install typings
 
 ```js
 // importing the package as a default
@@ -55,8 +80,9 @@ import KairosSMS from "@kairos/sms";
 ```
 or
 ```js
-import {KairosSMS} from "@kairos/sms"
+import { KairosSMS } from "@kairos/sms"
 ```
+#### Sending a quick SMS
 ```js
 KairosSMS
     .send({ apiKey: 'xxxxxxxxx', apiSecret: 'xxxxxxx', timeout: 90000}, {to: "xxxxxxxxxxx", from: "kairos", message: "this is a test message"})
@@ -65,6 +91,39 @@ KairosSMS
         // handle response 
         console.log(response)
 })
+```
+#### Sending a bulk SMS
+```js
+KairosSMS
+    .send({apiKey: 'xxxxxxxx', apiSecret: 'xxxxxxxx', timeout: 90000},{
+        "messages": [
+            {
+                "to": "233200746417",
+                "from": "Kairos Test",
+                "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                "type": "Quick"
+            }
+        ]
+    })
+    .asBulk()
+    .subscribe(response => {
+        // handle response
+        console.log(response)
+    })
+```
+> **NOTE:** Kairos SMS package also exposes an independent function that allows you to convert Observables to Promises to use `async/await`
+
+```js
+import { asPromise } from "@kairos/sms/as-promise";
+// always don't forget to append `async` if the function is created as found below
+async function sendSMS() {
+    const response = await asPromise(
+        KairosSMS
+        .send({ apiKey: 'xxxxxxxxx', apiSecret: 'xxxxxxx', timeout: 90000}, {to: "xxxxxxxxxxx", from: "kairos", message: "this is a test message"})
+        .asQuick()
+    )
+    console.log(response)
+}
 ```
 ## Creating an instance
 ## Methods
