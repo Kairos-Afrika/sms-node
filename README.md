@@ -33,12 +33,12 @@ Quickly use the package by running either of the below commands
 
 Using npm:
 ```bash
-npm i @kairos/sms
+npm i @kairosafrika/sms
 ```
 or
 Using yarn:
 ```bash
-yarn add @kairos/sms
+yarn add @kairosafrika/sms
 ```
 ## Request Structure
 Find the request structure when making an API request for Quick SMS.
@@ -88,11 +88,11 @@ Find the response structure when a successful or failed response is returned
 
 ```js
 // importing the package as a default
-import KairosSMS from "@kairos/sms";
+import KairosSMS from "@kairosafrika/sms";
 ```
 or
 ```js
-import { KairosSMS } from "@kairos/sms"
+import { KairosSMS } from "@kairosafrika/sms"
 ```
 #### Sending a quick SMS
 ```js
