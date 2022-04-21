@@ -144,10 +144,7 @@ const instance = KairosSMS.create({
 })
 ```
 ### Instance Methods
-There are two main available instance methods that exposes other important methods, This includes
-```html
-
-```
+There are two main available instance methods that exposes send methods and check balance methods, This includes
 | Method             | description             |
 |--------------------|-------------------------|
 | send(data)         | called when you want to send sms or check the current status of an already sent sms
