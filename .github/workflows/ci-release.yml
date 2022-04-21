@@ -59,6 +59,7 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
   publish-gpr:
     name: Publish Package (GITHUB)
     needs: build
@@ -83,9 +84,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
 
       - name: Authenticate with the GitHub Package Registry
-        run:
-            echo "//npm.pkg.github.com:_authToken=${{ secrets.GPR_TOKEN }}" >
-            ~/.npmrc
+        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GPR_TOKEN }}" > ~/.npmrc
 
       - name: Install Package Deps.
         run: yarn install --frozon-lockfile
