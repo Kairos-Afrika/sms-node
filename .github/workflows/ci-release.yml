@@ -25,6 +25,7 @@ jobs:
           scope: "@kairosafrika"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Install Package Deps.
         run: yarn install --frozon-lockfile
 
@@ -33,11 +34,11 @@ jobs:
 
       - name: Running Tests
         run: yarn run test
+
       - name: Publish Package
-        run: yarn publish --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #
 #      - name: Semantic Release
 #        if: github.event_name == 'push' && matrix.node-version == '14.x'
