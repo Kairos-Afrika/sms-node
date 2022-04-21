@@ -9,6 +9,7 @@
     "typescript": "^4.6.3"
   },
   "name": "@kairos/sms",
+  "description": "A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs making integration into your backend for sending SMS easier and faster",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
