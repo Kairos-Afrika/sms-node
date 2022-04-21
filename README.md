@@ -210,3 +210,8 @@ response
 })
 ```
 
+## Credits
+Kairos SMS Node is heavily inspired by [axios](https://github.com/axios)
+
+## License
+[MIT](LICENSE)
