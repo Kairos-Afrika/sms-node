@@ -10,7 +10,7 @@
   },
   "name": "@kairosafrika/sms",
   "description": "A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs making integration into your backend for sending SMS easier and faster",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf lib",
