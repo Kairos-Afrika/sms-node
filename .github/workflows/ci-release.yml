@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
-          registry-url: 'https://registry.npmjs.org/'
+          registry-url: https://npm.pkg.github.com
           scope: "@kairosafrika"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
       - name: Publish Package
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #
 #      - name: Semantic Release
 #        if: github.event_name == 'push' && matrix.node-version == '14.x'

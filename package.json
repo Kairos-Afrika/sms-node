@@ -34,9 +34,6 @@
   "files": [
     "lib/**/*"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/@kairosafrika"
-  },
   "repository": "git@github.com:Kairos-Afrika/sms-node.git",
   "author": "Lord Kay <offeilord@gmail.com>",
   "license": "MIT",
