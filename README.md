@@ -24,7 +24,7 @@ A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs m
 - Supports typescript from the get-go
 - Unsubscribed to method calls with the `unsubscribe()` method from `rxjs`
 
-### Installation
+## Installation
 Quickly use the package by running either of the below commands
 
 Using npm:
@@ -36,7 +36,7 @@ Using yarn:
 ```bash
 yarn add @kairos/sms
 ```
-### Request Structure
+## Request Structure
 Find the request structure when making an API request for Quick SMS.
 ```json
 {
@@ -59,7 +59,7 @@ Find the request structure when making an API request for Bulk SMS.
 }
 
 ```
-### Response Structure
+## Response Structure
 Find the response structure when a successful or failed response is returned
 
 ```json
