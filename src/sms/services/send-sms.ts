@@ -48,7 +48,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -66,7 +66,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -100,7 +100,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -131,7 +131,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
