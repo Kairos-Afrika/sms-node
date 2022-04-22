@@ -3,7 +3,8 @@
     "target": "ES5",
     "module": "CommonJS",
     "declaration": true,
-    "outDir": "./dist",
+    "rootDir": ".",
+    "outDir": "dist",
     "strict": true
   },
   "include": [

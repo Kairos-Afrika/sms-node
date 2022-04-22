@@ -13,7 +13,7 @@
   },
   "name": "@kairosafrika/sms",
   "description": "A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs making integration into your backend for sending SMS easier and faster",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -34,10 +34,8 @@
     "axios",
     "axios-observable"
   ],
-  "files": [
-    "src/**/*"
-  ],
   "publishConfig": {
+    "access": "public",
     "registry": "https://npm.pkg.github.com"
   },
   "repository": "git@github.com:Kairos-Afrika/sms-node.git",
