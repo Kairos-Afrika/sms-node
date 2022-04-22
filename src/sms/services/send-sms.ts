@@ -48,7 +48,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -66,7 +66,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -88,7 +88,7 @@ class SendSms {
         buildSMSResponse(
           HttpStatusCode.BAD_REQUEST,
           'Invalid request body passed',
-          { message: 'Request body must be an array' },
+          { message: `Request body must be an array` },
           false,
         ),
       );
@@ -100,7 +100,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
@@ -131,7 +131,7 @@ class SendSms {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
