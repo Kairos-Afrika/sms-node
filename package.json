@@ -6,11 +6,14 @@
     "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "@types/jest": "^27.4.1",
+    "ts-jest": "^27.1.4"
+
   },
   "name": "@kairosafrika/sms",
   "description": "A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs making integration into your backend for sending SMS easier and faster",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -32,7 +35,7 @@
     "axios-observable"
   ],
   "files": [
-    "lib/**/*"
+    "src/**/*"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -42,10 +45,8 @@
   "license": "MIT",
   "homepage": "https://kairosafrika.com",
   "dependencies": {
-    "@types/jest": "^27.4.1",
     "axios": "^0.26.1",
     "axios-observable": "^1.4.0",
-    "rxjs": "^7.5.5",
-    "ts-jest": "^27.1.4"
+    "rxjs": "^7.5.5"
   }
 }
