@@ -25,7 +25,7 @@ class Account {
         catchError((err) =>
           of(
             buildSMSResponse(
-              err?.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
               err?.response?.data?.message,
               err,
               false,
