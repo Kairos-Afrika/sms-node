@@ -69,17 +69,30 @@ Find the request structure when making an API request for Bulk SMS.
     }
   ]
 }
-
 ```
+> Note: type is optional but accepts only two values; Quick & Flash
 ## Response Structure
-Find the response structure when a successful or failed response is returned
+Find the response structure when a successful or failed response is returned.
 
+<span style="color: #39d353;font-size: 14px;">200 OK</span>
 ```json
 {
   "statusMessage": "SMS scheduled successfully",
   "statusCode": 200,
   "success": true,
   "data":  true,
+  "timestamp": "2022-04-21T06:46:22.983Z"
+}
+```
+<span style="color: #f05252;font-size: 14px;">400 Bad Request</span>
+```json
+{
+  "statusMessage": "Invalid path params passed",
+  "statusCode": 200,
+  "success": true,
+  "data":  { 
+    "message": "URl accept the id of sent message"
+  },
   "timestamp": "2022-04-21T06:46:22.983Z"
 }
 ```
@@ -126,7 +139,7 @@ KairosSMS
 > **NOTE:** Kairos SMS package also exposes an independent function that allows you to convert Observables to Promises to use `async/await`
 
 ```js
-import { asPromise } from "@kairos/sms/as-promise";
+import { asPromise } from "@kairos/sms";
 // always don't forget to append `async` if the function is created as found below
 async function sendSMS() {
     const response = await asPromise(

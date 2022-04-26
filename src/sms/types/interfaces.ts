@@ -46,7 +46,7 @@ interface ISMSBody {
 /**
  * Types of sms
  */
-type ISMSType = 'Quick';
+type ISMSType = 'Quick' | "Flash";
 
 /**
  * Generic API Call Response
@@ -83,4 +83,18 @@ export interface IUser {
   username: string | null;
   name: string;
   phone: string;
+}
+
+export interface IPaginateOption<T> {
+  content: ReadonlyArray<T>;
+  limit: number;
+  total: number;
+  pages: number;
+  page: number;
+  links?: ILinks;
+}
+
+export interface ILinks {
+  previousPage?: string;
+  nextPage?: string;
 }

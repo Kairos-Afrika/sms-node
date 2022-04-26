@@ -10,13 +10,13 @@ class Account {
    * API call x-access-token and x-access-secret configurations here
    * @private
    */
-  private readonly options;
-  constructor(options: IKairosSMSOptions) {
-    this.options = options;
+  private readonly config;
+  constructor(config: IKairosSMSOptions) {
+    this.config = config;
   }
 
   balance() {
-    return Api(this.options)
+    return Api(this.config)
       .get(APIEndpoints.GET_ACCOUNT_BALANCE)
       .pipe(
         map((response) =>
