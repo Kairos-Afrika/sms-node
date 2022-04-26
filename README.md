@@ -69,8 +69,8 @@ Find the request structure when making an API request for Bulk SMS.
     }
   ]
 }
-
 ```
+> Note: type is optional but accepts only two values; Quick & Flash
 ## Response Structure
 Find the response structure when a successful or failed response is returned.
 

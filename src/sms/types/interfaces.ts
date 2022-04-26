@@ -46,7 +46,7 @@ interface ISMSBody {
 /**
  * Types of sms
  */
-type ISMSType = 'Quick';
+type ISMSType = 'Quick' | "Flash";
 
 /**
  * Generic API Call Response

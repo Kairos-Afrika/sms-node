@@ -10,7 +10,7 @@ class SendSms {
    * API call x-access-token and x-access-secret configurations here
    * @private
    */
-  private readonly options;
+  private readonly config;
   /**
    * Request body to be passed for sending the sms
    * @private
@@ -19,11 +19,11 @@ class SendSms {
 
   /**
    * A constructor definition for setting Kairos SMS API credentials and request body
-   * @param options
+   * @param config
    * @param data
    */
-  constructor(options: IKairosSMSOptions, data: ISingleSMSBody | IBulkSMSBody | string) {
-    this.options = options;
+  constructor(config: IKairosSMSOptions, data: ISingleSMSBody | IBulkSMSBody | string) {
+    this.config = config;
     this.data = data;
   }
 
@@ -41,7 +41,7 @@ class SendSms {
         ),
       );
     }
-    return Api(this.options)
+    return Api(this.config)
       .post(APIEndpoints.SEND_QUICK_SMS, this.data as ISingleSMSBody)
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS successfully scheduled`, response?.data, true)),
@@ -59,7 +59,7 @@ class SendSms {
   }
 
   asQuickMultipleMSISDN() {
-    return Api(this.options)
+    return Api(this.config)
       .post(APIEndpoints.SEND_QUICK_MULTIPLE_MSISDN, this.data as ISingleSMSBody)
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS successfully scheduled`, response?.data, true)),
@@ -93,7 +93,7 @@ class SendSms {
         ),
       );
     }
-    return Api(this.options)
+    return Api(this.config)
       .post(APIEndpoints.SEND_BULK_SMS, this.data as IBulkSMSBody)
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `Bulk SMS successfully scheduled`, response?.data, true)),
@@ -124,7 +124,7 @@ class SendSms {
         ),
       );
     }
-    return Api(this.options)
+    return Api(this.config)
       .get(APIEndpoints.PING_SMS_STATUS.replace('{sms_id}', this.data as string))
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS response details`, response?.data, true)),
