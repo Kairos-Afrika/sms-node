@@ -84,3 +84,17 @@ export interface IUser {
   name: string;
   phone: string;
 }
+
+export interface IPaginateOption<T> {
+  content: ReadonlyArray<T>;
+  limit: number;
+  total: number;
+  pages: number;
+  page: number;
+  links?: ILinks;
+}
+
+export interface ILinks {
+  previousPage?: string;
+  nextPage?: string;
+}
