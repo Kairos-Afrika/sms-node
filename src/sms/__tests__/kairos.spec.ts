@@ -4,11 +4,13 @@ import { IBulkSMSBody, ISingleSMSBody } from '../types/interfaces';
 import { SendSms } from '../services/send-sms';
 import { QuickSmsStub } from './stubs/quick-sms.stub';
 import { Account } from '../services/account';
+import Contacts from '../services/contacts';
 jest.mock('../index', () => ({
   KairosSMS: jest.fn().mockImplementation(() => {
     return {
       send: () => jest.fn(),
       account: () => jest.fn(),
+      contacts: () => jest.fn(),
     };
   }),
 }));
@@ -36,7 +38,9 @@ jest.mock('../services/account', () => {
   };
 });
 
-describe('Kairos SMS', function () {
+jest.mock('../services/contacts');
+
+describe('Kairos SMS with new keyword', function () {
   let kairosInstance: KairosSMS;
   beforeAll(() => {
     kairosInstance = new KairosSMS(KairosConfigOptions);
@@ -64,5 +68,12 @@ describe('Kairos SMS', function () {
     expect(kairosInstance.account).toBeDefined();
     const response = await kairosInstance.account();
     expect(response.balance).toBeDefined();
+  });
+
+  it('should return all defined methods in the kairos contacts class', async () => {
+    jest.spyOn(kairosInstance, 'contacts').mockImplementation((): Contacts => {
+      return new Contacts(KairosConfigOptions, { page: 1, size: 15 });
+    });
+    expect(kairosInstance.contacts).toBeDefined();
   });
 });

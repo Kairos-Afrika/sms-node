@@ -19,6 +19,11 @@ describe('Account Balance', function () {
     accountInstance = new Account(KairosConfigOptions);
   });
 
+  it('should create an instance of an account with specific config ', function () {
+    expect(Account).toBeCalledWith(KairosConfigOptions);
+    expect(Account).toBeCalledTimes(1);
+  });
+
   it('should return the remaining credit balance', async () => {
     jest.spyOn(accountInstance, 'balance').mockImplementation(() => {
       return of(SMSResponseStub(HttpStatusCode.OK, SMSAccountBalanceStub(), true));

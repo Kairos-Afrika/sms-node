@@ -21,6 +21,7 @@ describe('Send SMS', function () {
   beforeAll(() => {
     jest.clearAllMocks();
   });
+
   let sendSmsInstance: SendSms;
   describe('SMS Quick Requests', function () {
     beforeEach(() => {
