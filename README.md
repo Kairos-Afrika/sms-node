@@ -225,6 +225,63 @@ response
         console.log(response)
 })
 ```
+#### Contacts()
+Contacts method also exposes a handful of functions that to allow you to GET,PATCH, POST contacts to your accounts
+| HTTP Verb | Methods                        | Descriptions                                           | Active |
+|-----------|--------------------------------|--------------------------------------------------------|--------|
+| GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |   [x]  |
+|-----------|--------------------------------|--------------------------------------------------------|--------|
+##### setPage()
+##### setSize()
+##### asList()
+Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform by calling `asList()`
+
+Make a request by passing *page* and *size* directly to the `contacts()` method
+```js
+response
+     .contacts({
+         page: 1,
+         size: 15
+     })
+     .asList()
+     .subscribe(response => {
+         //handle repsonse here
+        console.log(response)
+    })
+```
+
+Make a request by performing method chaining
+```js
+response
+      .contacts()
+      .setPage(1)
+      .setSize(15)
+      .asList().subscribe(response => {
+          // handle response here
+        console.log(response)
+    })
+```
+
+Make a request by passing `configs` and optional `options` to the static `contacts()` method
+
+Options  - the current page and the total size to show per page
+```js
+{
+    page: 1, 
+    size: 15
+}
+```
+Example
+```js
+const response = KairosSMS
+    .contacts(configs, {page: 1, size: 15})
+    .asList()
+    .subscribe(response => {
+    //handle response here
+    console.log(response)
+})
+```
+>NB. calling setPage & setSize overrides what's been set as the static contacts method.
 
 ## Credits
 Kairos SMS Node is heavily inspired by [axios](https://github.com/axios)
