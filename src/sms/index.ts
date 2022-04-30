@@ -2,7 +2,6 @@ import { IBulkSMSBody, IItemsPerPage, IKairosSMSOptions, ISingleSMSBody } from '
 import { SendSms } from './services/send-sms';
 import { Account } from './services/account';
 import Contacts from './services/contacts';
-import { KairosConfigOptions } from './__tests__/mocks/mocks';
 
 class KairosSMS {
   private readonly config: IKairosSMSOptions;
