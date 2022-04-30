@@ -37,3 +37,18 @@ export const SMSAccountBalance: IBalance = {
     phone: '0200384773',
   },
 };
+
+export const AccountContacts = {
+  id: 2506,
+  uuid: '234695fb-94c8-4ff5-a8fe-292fea6f2724',
+  createdAt: '2022-04-01T16:51:58.149Z',
+  updatedAt: '2022-04-01T16:51:58.149Z',
+  deletedAt: null,
+  name: 'sdafsdfsaf',
+  slug: 'sdafsdfsaf',
+  phone: '0500949999',
+  dateOfBirth: null,
+  allowBirthdayNotifications: true,
+};
+
+export const AccountContactsList = [AccountContacts];

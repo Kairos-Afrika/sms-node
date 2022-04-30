@@ -46,7 +46,9 @@ interface ISMSBody {
 /**
  * Types of sms
  */
-type ISMSType = 'Quick' | "Flash";
+type ISMSType = 'Quick' | 'Flash';
+
+export type SORT_ITEMS = 'DESC' | 'ASC';
 
 /**
  * Generic API Call Response
@@ -85,16 +87,39 @@ export interface IUser {
   phone: string;
 }
 
-export interface IPaginateOption<T> {
-  content: ReadonlyArray<T>;
+/**
+ * Pagination type definitions
+ */
+export type IPagination<T> = {
+  paginateObj: IPaginateObject<T>;
+  meta: IMetaData;
+};
+
+export interface IPaginateObject<T> {
+  docs: ReadonlyArray<T>;
   limit: number;
   total: number;
-  pages: number;
   page: number;
-  links?: ILinks;
+  pages: number;
 }
 
-export interface ILinks {
-  previousPage?: string;
-  nextPage?: string;
+export interface IMetaData {
+  item_count: number | null;
+  limit: number | null;
+}
+
+export interface IItemsPerPage {
+  page: number;
+  size: number;
+}
+
+export interface IContacts {
+  name: string;
+  dateOfBirth: string | null;
+  slug: string;
+  uuid: string;
+  createdAt: string;
+  updatedAt: string;
+  allowBirthdayNotifications: boolean;
+  id: number;
 }

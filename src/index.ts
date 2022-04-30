@@ -1,6 +1,6 @@
 import { asPromise } from './sms/as-promise';
-import KairosSMS from './sms';
+import { KairosSMS } from './sms';
 
 export { asPromise };
-export { KairosSMS };
 export default KairosSMS;
+export { KairosSMS };

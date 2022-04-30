@@ -1,5 +1,6 @@
 import * as Helpers from '../utils/helpers';
 import { SMSResponseStub } from './stubs/quick-sms.stub';
+import { HttpStatusCode } from '../constants/http-status-code.constants';
 
 describe('Helper Functions', function () {
   beforeAll(() => {
@@ -23,6 +24,14 @@ describe('Helper Functions', function () {
         'Sms failed to schedule',
         { message: 'Invalid request made' },
         false,
+      );
+      expect(response).toStrictEqual(
+        Helpers.buildSMSResponse(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Sms failed to schedule',
+          { message: 'Invalid request made' },
+          false,
+        ),
       );
       expect(response.data).toHaveProperty(['message']);
       expect(response.statusCode).toBe(500);

@@ -172,6 +172,7 @@ There are two main available instance methods that exposes send methods and chec
 |--------------------|-------------------------|
 | send(data)         | called when you want to send sms or check the current status of an already sent sms
 | account()          | called when you want to check the account balance
+| contacts()         | called when you want to GET,PATCH,DELETE contact details associated with an account
 
 #### Send(data)
 After you've created the instance, you can then call the `send(data)` method,
@@ -224,6 +225,67 @@ response
         console.log(response)
 })
 ```
+#### Contacts()
+Contacts method also exposes a handful of functions that to allow you to GET,PATCH, POST contacts to your accounts
+| HTTP Verb | Methods                        | Descriptions                                           | Active |
+|-----------|--------------------------------|--------------------------------------------------------|--------|
+| GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
+
+##### setPage()
+##### setSize()
+##### asList()
+Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform by calling `asList()`
+
+#### Example #1
+
+Make a request by passing *page* and *size* directly to the `contacts()` method
+```js
+instance
+     .contacts({
+         page: 1,
+         size: 15
+     })
+     .asList()
+     .subscribe(response => {
+         //handle repsonse here
+        console.log(response)
+    })
+```
+
+#### Example #2
+
+Make a request by performing method chaining
+```js
+instance
+      .contacts()
+      .setPage(1)
+      .setSize(15)
+      .asList().subscribe(response => {
+          // handle response here
+        console.log(response)
+    })
+```
+
+Make a request by passing `configs` and optional `options` to the static `contacts()` method
+
+Options  - the current page and the total size to show per page
+```js
+{
+    page: 1, 
+    size: 15
+}
+```
+#### Example #3
+```js
+const response = KairosSMS
+    .contacts(configs, {page: 1, size: 15})
+    .asList()
+    .subscribe(response => {
+    //handle response here
+    console.log(response)
+})
+```
+>NB. calling setPage & setSize overrides what's been set as the static contacts method.
 
 ## Credits
 Kairos SMS Node is heavily inspired by [axios](https://github.com/axios)

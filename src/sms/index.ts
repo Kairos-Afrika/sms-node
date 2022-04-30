@@ -1,14 +1,25 @@
-import { IBulkSMSBody, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
+import { IBulkSMSBody, IItemsPerPage, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
 import { SendSms } from './services/send-sms';
 import { Account } from './services/account';
+import Contacts from './services/contacts';
 
 class KairosSMS {
   private readonly config: IKairosSMSOptions;
+
+  /**
+   * Kairos SMS constructor
+   * @param config
+   */
   constructor(config: IKairosSMSOptions) {
     this.config = config;
   }
-  static create(options: IKairosSMSOptions) {
-    return new KairosSMS(options);
+
+  /**
+   * Create an instance of KairosSMS Using the static create
+   * @param config
+   */
+  static create(config: IKairosSMSOptions) {
+    return new KairosSMS(config);
   }
 
   /**
@@ -28,6 +39,14 @@ class KairosSMS {
   }
 
   /**
+   * Defined method for handling actions on customer contacts
+   * @param options
+   */
+  contacts(options?: IItemsPerPage): Contacts {
+    return new Contacts(this.config, options);
+  }
+
+  /**
    * Static definitions for account balance checker
    * @param config
    */
@@ -42,6 +61,13 @@ class KairosSMS {
    */
   static send(config: IKairosSMSOptions, body: ISingleSMSBody | IBulkSMSBody | string): SendSms {
     return new SendSms(config, body);
+  }
+
+  /**
+   * Static definitions for contacts impl.
+   */
+  static contacts(config: IKairosSMSOptions, options?: IItemsPerPage): Contacts {
+    return new Contacts(config, options);
   }
 }
 

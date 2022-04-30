@@ -6,4 +6,5 @@ export const APIEndpoints = {
   PING_SMS_STATUS: `/external/sms/logs/{sms_id}/ping/status`,
   RESEND_FAILED_SMS: `/external/sms/quick/{sms_id}/resend`,
   GET_ACCOUNT_BALANCE: `/external/account/balance`,
+  GET_CONTACT_LIST: `/external/account/contacts?page={page}&size={size}&sort={sort}`,
 };

@@ -1,6 +1,5 @@
 import { IBalance, ISingleSMSBody } from '../../types/interfaces';
 import { QuickSMSBody, SMSAccountBalance, SMSResponse } from '../mocks/mocks';
-import { of } from 'rxjs';
 
 export const QuickSmsStub = (): ISingleSMSBody => {
   return QuickSMSBody;
