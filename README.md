@@ -240,7 +240,7 @@ Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform b
 
 Make a request by passing *page* and *size* directly to the `contacts()` method
 ```js
-response
+instance
      .contacts({
          page: 1,
          size: 15
@@ -256,7 +256,7 @@ response
 
 Make a request by performing method chaining
 ```js
-response
+instance
       .contacts()
       .setPage(1)
       .setSize(15)
