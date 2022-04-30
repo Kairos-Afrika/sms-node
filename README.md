@@ -229,8 +229,8 @@ response
 Contacts method also exposes a handful of functions that to allow you to GET,PATCH, POST contacts to your accounts
 | HTTP Verb | Methods                        | Descriptions                                           | Active |
 |-----------|--------------------------------|--------------------------------------------------------|--------|
-| GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |   [x]  |
-|-----------|--------------------------------|--------------------------------------------------------|--------|
+| GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
+
 ##### setPage()
 ##### setSize()
 ##### asList()
