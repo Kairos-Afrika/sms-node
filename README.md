@@ -172,6 +172,7 @@ There are two main available instance methods that exposes send methods and chec
 |--------------------|-------------------------|
 | send(data)         | called when you want to send sms or check the current status of an already sent sms
 | account()          | called when you want to check the account balance
+| contacts()         | called when you want to GET,PATCH,DELETE contact details associated with an account
 
 #### Send(data)
 After you've created the instance, you can then call the `send(data)` method,
