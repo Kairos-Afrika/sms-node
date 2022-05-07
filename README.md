@@ -259,8 +259,10 @@ Make a request by passing *page* and *size* directly to the `contacts()` method
 ```js
 instance
      .contacts({
-         page: 1,
-         size: 15
+         paginate: {
+             page: 1,
+             size: 15
+         }
      })
      .asList()
      .subscribe(response => {
