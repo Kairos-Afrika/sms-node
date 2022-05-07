@@ -234,6 +234,8 @@ Contacts method also exposes a handful of functions that to allow you to GET,PAT
 
 ##### setPage()
 ##### setSize()
+
+##### List All Contacts
 ##### asList()
 Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform by calling `asList()`
 
@@ -326,7 +328,7 @@ response$.subscribe(data => {
     console.log(data)
 })
 ```
-> NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` and an optional `timout
+> NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` with an optional `timout`
 
 
 ## Credits
