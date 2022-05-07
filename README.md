@@ -4,7 +4,7 @@
 [![Dev Status](https://img.shields.io/badge/Status-WIP-yellowgreen)](https://img.shields.io/badge/Status-WIP-yellowgreen)
 [![CI Status](https://github.com/Kairos-Afrika/sms-node/actions/workflows/ci.yml/badge.svg)](https://github.com/Kairos-Afrika/sms-node/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/Tests-100%25%20Passed-green)](https://img.shields.io/badge/Tests-100%25%20Passed-green)
-[![Code Coverage](https://img.shields.io/badge/Coverage-87.5%25-success)](https://img.shields.io/badge/Coverage-87.5%25-success)
+[![codecov.io](https://codecov.io/github/Kairos-Afrika/sms-node/coverage.svg?branch=main)](https://codecov.io/github/Kairos-Afrika/sms-node?branch=main)
 [![Node](https://img.shields.io/badge/Node-12.x%2C14.x%2C16.x-blue)](https://img.shields.io/badge/Node-12.x%2C14.x%2C16.x-blue)
 [![License](https://img.shields.io/badge/License-MIT-blue)](https://img.shields.io/badge/License-MIT-blue)
 
