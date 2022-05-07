@@ -230,6 +230,8 @@ Contacts method also exposes a handful of functions that to allow you to GET,PAT
 | HTTP Verb | Methods                        | Descriptions                                           | Active |
 |-----------|--------------------------------|--------------------------------------------------------|--------|
 | GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
+|-----------|--------------------------------|--------------------------------------------------------|--------|
+| POST      | create()                       | Create a new contact by calling the create() method    | :heavy_check_mark: |
 
 ##### setPage()
 ##### setSize()
@@ -278,7 +280,13 @@ Options  - the current page and the total size to show per page
 #### Example #3
 ```js
 const response = KairosSMS
-    .contacts(configs, {page: 1, size: 15})
+    .contacts(configs, {
+        paginate: {
+            page: 1, 
+            size: 15
+           }
+        }
+    )
     .asList()
     .subscribe(response => {
     //handle response here
@@ -286,6 +294,41 @@ const response = KairosSMS
 })
 ```
 >NB. calling setPage & setSize overrides what's been set as the static contacts method.
+
+##### Create A Contact
+Create a new contact via Kairos SMS API by calling either of these two procedures
+##### Example #1
+Create an instance of the Kairos SMS that exposes the `contacts()` method and then pass the body of the contact to be created directly to that method
+```js
+const instance = KairosSMS.create([config])
+const response$ = instance.contacts({
+    body: {
+        name: "Achemapong",
+        phone: "0200746417",
+        dateOfBirth: null
+    }
+}).create();
+response$.subscribe(data => {
+    // handle response here
+    console.log(data)
+})
+```
+
+##### Example #2
+You can also pass the body of the contact to be created directly to the create method that's exposed by the `contacts()` method.
+```js
+const response$ = instance.contacts().create({
+    name: "Achemapong",
+    phone: "0200746417",
+    dateOfBirth: null
+})
+response$.subscribe(data => {
+    // handle response here
+    console.log(data)
+})
+```
+> NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` and an optional `timout
+
 
 ## Credits
 Kairos SMS Node is heavily inspired by [axios](https://github.com/axios)

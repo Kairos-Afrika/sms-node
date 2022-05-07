@@ -72,7 +72,7 @@ describe('Kairos SMS with new keyword', function () {
 
   it('should return all defined methods in the kairos contacts class', async () => {
     jest.spyOn(kairosInstance, 'contacts').mockImplementation((): Contacts => {
-      return new Contacts(KairosConfigOptions, { page: 1, size: 15 });
+      return new Contacts(KairosConfigOptions, { paginate: { page: 1, size: 15 } });
     });
     expect(kairosInstance.contacts).toBeDefined();
   });

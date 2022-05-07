@@ -1,4 +1,4 @@
-import { IBulkSMSBody, IItemsPerPage, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
+import { IBulkSMSBody, IContactsOptions, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
 import { SendSms } from './services/send-sms';
 import { Account } from './services/account';
 import Contacts from './services/contacts';
@@ -42,7 +42,7 @@ class KairosSMS {
    * Defined method for handling actions on customer contacts
    * @param options
    */
-  contacts(options?: IItemsPerPage): Contacts {
+  contacts(options?: IContactsOptions): Contacts {
     return new Contacts(this.config, options);
   }
 
@@ -66,7 +66,7 @@ class KairosSMS {
   /**
    * Static definitions for contacts impl.
    */
-  static contacts(config: IKairosSMSOptions, options?: IItemsPerPage): Contacts {
+  static contacts(config: IKairosSMSOptions, options?: IContactsOptions): Contacts {
     return new Contacts(config, options);
   }
 }

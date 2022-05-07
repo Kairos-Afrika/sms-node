@@ -51,4 +51,12 @@ export const AccountContacts = {
   allowBirthdayNotifications: true,
 };
 
+export const AccountContactsResponse = {
+  statusCode: 200,
+  statusMessage: 'Contact created successfully',
+  data: AccountContacts,
+  timestamp: new Date().toISOString(),
+  success: true,
+};
+
 export const AccountContactsList = [AccountContacts];

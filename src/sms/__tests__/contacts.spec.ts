@@ -1,7 +1,7 @@
 import Contacts from '../services/contacts';
-import { KairosConfigOptions } from './mocks/mocks';
+import { AccountContacts, KairosConfigOptions } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
-import { AccountContactsStub } from './stubs/contacts.stub';
+import { AccountContactsStub, CreateAccountContactResponseStub, CreateAccountContactStub } from './stubs/contacts.stub';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
 
 jest.mock('../services/contacts');
@@ -13,7 +13,7 @@ describe('Contacts List', function () {
 
   describe('Constructor Test', function () {
     it('should an instance of Contacts', function () {
-      const contactInstance = new Contacts(KairosConfigOptions, { page: 1, size: 10 });
+      const contactInstance = new Contacts(KairosConfigOptions, { paginate: { page: 1, size: 10 } });
       expect(contactInstance).toBeInstanceOf(Contacts);
     });
   });
@@ -84,6 +84,42 @@ describe('Contacts List', function () {
         const response = await lastValueFrom(contactInstance.setPage(1).setSize(15).asList());
         expect(response.statusCode).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
         expect(response.success).toBeFalsy();
+      });
+    });
+  });
+
+  describe('Create A New Contact', function () {
+    describe('Success Contact Creation', function () {
+      let contactInstance: Contacts;
+      beforeAll(() => {
+        contactInstance = new Contacts(KairosConfigOptions, { body: CreateAccountContactStub() });
+      });
+      it('should create a new contact successfully', async () => {
+        jest.spyOn(contactInstance, 'create').mockImplementation(() => {
+          return of(CreateAccountContactResponseStub(200, true)) as any;
+        });
+        const response = await lastValueFrom(contactInstance.create());
+        expect(response.statusCode).toBe(200);
+        expect(response.data).toStrictEqual(AccountContacts);
+        expect(response.success).toBeTruthy();
+        expect(response.statusMessage).toBe('Contact created successfully');
+      });
+    });
+
+    describe('Failed Contact Creation', function () {
+      let contactInstance: Contacts;
+      beforeEach(() => {
+        contactInstance = new Contacts(KairosConfigOptions);
+      });
+      it('should return bad request for not passing a valid payload', async () => {
+        jest.spyOn(contactInstance, 'create').mockImplementation(() => {
+          return of(CreateAccountContactResponseStub(400, false, { message: 'Invalid request body passed' }));
+        });
+        const response = await lastValueFrom(contactInstance.create());
+        expect(contactInstance).toBeInstanceOf(Contacts);
+        expect(response.success).toBeFalsy();
+        expect(response.data).toHaveProperty(['message']);
+        expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
       });
     });
   });

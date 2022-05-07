@@ -108,6 +108,11 @@ export interface IMetaData {
   limit: number | null;
 }
 
+export interface IContactsOptions {
+  body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>;
+  paginate?: IItemsPerPage;
+}
+
 export interface IItemsPerPage {
   page: number;
   size: number;
@@ -118,6 +123,7 @@ export interface IContacts {
   dateOfBirth: string | null;
   slug: string;
   uuid: string;
+  phone: string;
   createdAt: string;
   updatedAt: string;
   allowBirthdayNotifications: boolean;
