@@ -227,11 +227,10 @@ response
 ```
 #### Contacts()
 Contacts method also exposes a handful of functions that to allow you to GET,PATCH, POST contacts to your accounts
-| HTTP Verb | Methods                        | Descriptions                                           | Active |
-|-----------|--------------------------------|--------------------------------------------------------|--------|
+| HTTP Verb | Methods                        | Descriptions                                           | Active               |
+|-----------|--------------------------------|--------------------------------------------------------|----------------------|
 | GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
-|-----------|--------------------------------|--------------------------------------------------------|--------|
-| POST      | create()                       | Create a new contact by calling the create() method    | :heavy_check_mark: |
+| POST      | create()                       | Create a new contact by calling the create() method    | :heavy_check_mark:   |
 
 ##### setPage()
 ##### setSize()
