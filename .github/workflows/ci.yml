@@ -29,6 +29,10 @@ jobs:
 
       - name: Running Tests
         run: yarn run test
+
+      - name: Running Tests With Coverage
+        run: yarn run coverage
+
       - name: Build Package
         run: yarn run build
       - name: Submit Code Coverage
