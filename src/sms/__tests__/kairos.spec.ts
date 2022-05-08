@@ -8,7 +8,10 @@ import Contacts from '../services/contacts';
 jest.mock('../index', () => ({
   KairosSMS: jest.fn().mockImplementation(() => {
     return {
-      send: () => jest.fn(),
+      send: () =>
+        jest.fn().mockImplementation(() => {
+          return new SendSms(KairosConfigOptions, '2');
+        }),
       account: () => jest.fn(),
       contacts: () => jest.fn(),
     };

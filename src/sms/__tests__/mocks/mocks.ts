@@ -2,7 +2,7 @@ import { IBalance, ISingleSMSBody } from '../../types/interfaces';
 
 export const AxiosConfigOptions = {
   baseURL: 'https://testing.com',
-  timeout: 9000,
+  timeout: 8000,
 };
 
 export const KairosConfigOptions = {
