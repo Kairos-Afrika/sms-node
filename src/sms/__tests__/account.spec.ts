@@ -11,7 +11,7 @@ describe('Account Balance', function () {
   });
 
   it('should create an instance of an account with specific config ', function () {
-    expect(accountInstance).toBeInstanceOf(Account)
+    expect(accountInstance).toBeInstanceOf(Account);
   });
 
   it('should return the remaining credit balance', async () => {

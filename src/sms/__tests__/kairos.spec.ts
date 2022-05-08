@@ -6,7 +6,6 @@ import { QuickSmsStub } from './stubs/quick-sms.stub';
 import { Account } from '../services/account';
 import Contacts from '../services/contacts';
 
-
 describe('Kairos SMS with new keyword', function () {
   let kairosInstance: KairosSMS;
   beforeAll(() => {
@@ -49,7 +48,7 @@ describe('Kairos SMS Instances with static create', function () {
   let kairosInstance: KairosSMS;
   beforeEach(() => {
     kairosInstance = KairosSMS.create(KairosConfigOptions);
-  })
+  });
 
   it('should return an instance of kairos sms with the static create', async () => {
     expect(kairosInstance).toBeInstanceOf(KairosSMS);
@@ -65,7 +64,7 @@ describe('Kairos SMS Instances with static create', function () {
   });
 
   it('should return an instance of SendSms ', function () {
-    let sendSMSInstance = kairosInstance.send(QuickSmsStub())
+    let sendSMSInstance = kairosInstance.send(QuickSmsStub());
     expect(sendSMSInstance).toBeInstanceOf(SendSms);
     expect(sendSMSInstance.asPing).toBeDefined();
     expect(sendSMSInstance.asQuick).toBeDefined();
@@ -79,22 +78,21 @@ describe('Kairos SMS Instances with static create', function () {
     expect(contactInstance.create).toBeDefined();
     expect(contactInstance.asList).toBeDefined();
   });
-})
+});
 
 describe('Kairos SMS Instances with static methods', function () {
   it('should return an instance of an Account', function () {
-    let kairosInstance = KairosSMS.account(KairosConfigOptions)
+    let kairosInstance = KairosSMS.account(KairosConfigOptions);
     expect(kairosInstance).toBeInstanceOf(Account);
   });
 
   it('should return an instance of an Send SMS', function () {
-    let kairosInstance = KairosSMS.send(KairosConfigOptions, QuickSmsStub())
+    let kairosInstance = KairosSMS.send(KairosConfigOptions, QuickSmsStub());
     expect(kairosInstance).toBeInstanceOf(SendSms);
   });
 
   it('should return an instance of Contact', function () {
-    let kairosInstance = KairosSMS.contacts(KairosConfigOptions)
+    let kairosInstance = KairosSMS.contacts(KairosConfigOptions);
     expect(kairosInstance).toBeInstanceOf(Contacts);
   });
-})
-
+});

@@ -1,7 +1,7 @@
 import * as Helpers from '../utils/helpers';
 import { SMSResponseStub } from './stubs/quick-sms.stub';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
-import {buildSMSResponse} from "../utils/helpers";
+import { buildSMSResponse } from '../utils/helpers';
 
 describe('Helper Functions', function () {
   beforeAll(() => {
@@ -13,11 +13,11 @@ describe('Helper Functions', function () {
   });
 
   describe('Build SMS Response', function () {
-    const response = buildSMSResponse(200, "Sms scheduled successfully", true,true)
+    const response = buildSMSResponse(200, 'Sms scheduled successfully', true, true);
     expect(response.data).toBeTruthy();
     expect(response.statusCode).toBe(200);
-    expect(response.statusMessage).toBe("Sms scheduled successfully")
-  })
+    expect(response.statusMessage).toBe('Sms scheduled successfully');
+  });
 
   describe('SMS Responses', function () {
     it('should return a successful sms response', function () {
