@@ -7,8 +7,8 @@ export const Api = (credentials: IKairosSMSOptions) => {
     baseURL: APIEndpoints.BASE_URL,
     timeout: credentials?.timeout ?? 8000,
     headers: {
-      'x-api-key': credentials?.apiKey,
-      'x-api-secret': credentials?.apiSecret,
+      'x-api-key': credentials.apiKey,
+      'x-api-secret': credentials.apiSecret,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

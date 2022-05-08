@@ -3,15 +3,6 @@ import { SMSAccountBalanceStub, SMSResponseStub } from './stubs/quick-sms.stub';
 import { KairosConfigOptions } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
-jest.mock('../services/account', () => {
-  return {
-    Account: jest.fn().mockImplementation(() => {
-      return {
-        balance: () => jest.fn(),
-      };
-    }),
-  };
-});
 
 describe('Account Balance', function () {
   let accountInstance: Account;
@@ -20,8 +11,7 @@ describe('Account Balance', function () {
   });
 
   it('should create an instance of an account with specific config ', function () {
-    expect(Account).toBeCalledWith(KairosConfigOptions);
-    expect(Account).toBeCalledTimes(1);
+    expect(accountInstance).toBeInstanceOf(Account)
   });
 
   it('should return the remaining credit balance', async () => {

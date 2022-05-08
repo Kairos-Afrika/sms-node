@@ -7,7 +7,7 @@ export const AxiosConfigOptions = {
 
 export const KairosConfigOptions = {
   apiKey: 'xxxxxxxxx',
-  apiSecret: 'xxxxxxxxxxx',
+  apiSecret: 'xxxxxxxxxxx'
 };
 
 export const QuickSMSBody: ISingleSMSBody = {

@@ -2,8 +2,8 @@ import * as ApiRequest from '../api';
 import { Axios } from 'axios-observable';
 import { IKairosSMSOptions } from '../types/interfaces';
 import { APIEndpoints } from '../constants/api-endpoints.constants';
-import {AxiosConfigOptions} from "./mocks/mocks";
-
+import {AxiosConfigOptions, KairosConfigOptions} from "./mocks/mocks";
+import {Api} from "../api";
 
 
 describe("Axios Instance", function () {
@@ -14,7 +14,19 @@ describe("Axios Instance", function () {
     expect(axiosInstance.defaults.baseURL).toBe("https://testing.com")
     expect(axiosInstance.defaults.timeout).toBe(8000)
   });
+
+  it('should return an instance of Axios with KairosConfigOptions', function () {
+    const apiInstance = Api(KairosConfigOptions)
+    expect(apiInstance).toBeInstanceOf(Axios);
+    expect(apiInstance.defaults.timeout).toBe(8000)
+  });
+
+  it('should return an instance of Axios with only baseUrl set', function () {
+    const apiInstance  = Api({timeout: 8000, apiSecret: "", apiKey: ""})
+    expect(apiInstance).toBeInstanceOf(Axios)
+  });
 })
+
 
 describe('API Call Instance', function () {
   beforeAll(() => {
