@@ -319,8 +319,8 @@ Create an instance of the Kairos SMS that exposes the `contacts()` method and th
 const instance = KairosSMS.create([config])
 const response$ = instance.contacts({
     body: {
-        name: "Achemapong",
-        phone: "0200746417",
+        name: "Jane Doe",
+        phone: "0203746417",
         dateOfBirth: null
     }
 }).create();
