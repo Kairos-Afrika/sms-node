@@ -354,7 +354,50 @@ response$.subscribe((data) => {
     console.log(data)
 })
 ```
-> NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` with an optional `timout`
+
+##### Update a Contact 
+Update the details of a contact by passing the contact **id** and the **payload** as a parameter
+##### Example #1
+Pass the payload or the request body as a part of the `contacts()` method and then the `contactId` as a parameter to the `update(id)` chained method.
+```js
+const response$ = instance.contacts({
+    body: {
+        name: "Jane Doe",
+        phone: "0203746417",
+        dateOfBirth: null
+    }
+}).update(12);
+response$.subscribe(data => {
+    // handle response here
+    console.log(data)
+})
+```
+##### Example #2
+You can also pass both the request payload and the id as parameters to the `update()` method
+```js
+const response$ = instance.contacts().update(12,
+    {
+        name: "Jane Doe",
+        phone: "0203746417",
+        dateOfBirth: null
+    });
+response$.subscribe(data => {
+    // handle response here
+    console.log(data)
+})
+```
+##### Delete A Contact
+Remove a specific contact from your contact list by passing the `contactId` as a parameter to  `delete(id)` exposed by the `contacts()` method
+##### Example #1
+```js
+const response$ = instance.contacts().delete(12)
+response$.subscribe((data) => {
+    // handle response here
+    console.log(data)
+})
+```
+
+> NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` with an optional `timeout`
 
 
 ## Credits
