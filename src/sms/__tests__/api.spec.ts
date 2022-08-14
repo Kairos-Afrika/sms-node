@@ -19,11 +19,6 @@ describe('Axios Instance', function () {
     expect(apiInstance).toBeInstanceOf(Axios);
     expect(apiInstance.defaults.timeout).toBe(8000);
   });
-
-  it('should return an instance of Axios with only baseUrl set', function () {
-    const apiInstance = Api({ timeout: 8000, apiSecret: '', apiKey: '' });
-    expect(apiInstance).toBeInstanceOf(Axios);
-  });
 });
 
 describe('API Call Instance', function () {
