@@ -346,6 +346,7 @@ response$.subscribe(data => {
 
 ##### Get a Contact Details
 Get the details of a particular contact by passing the **id** as a parameter
+##### Example #1
 ```js
 const response$ = instance.contacts().details(12)
 response$.subscribe((data) => {
