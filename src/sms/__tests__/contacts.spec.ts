@@ -1,7 +1,12 @@
 import Contacts from '../services/contacts';
 import { AccountContacts, KairosConfigOptions } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
-import { AccountContactsStub, CreateAccountContactResponseStub, CreateAccountContactStub } from './stubs/contacts.stub';
+import {
+  AccountContactDetailsStub,
+  AccountContactsStub,
+  CreateAccountContactResponseStub,
+  CreateAccountContactStub,
+} from './stubs/contacts.stub';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
 
 jest.mock('../services/contacts');
@@ -121,6 +126,27 @@ describe('Contacts List', function () {
         expect(response.data).toHaveProperty(['message']);
         expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
       });
+    });
+  });
+
+  describe('Get A Contact Details', function () {
+    let contactInstance: Contacts;
+    beforeEach(() => {
+      contactInstance = new Contacts(KairosConfigOptions);
+    });
+    it('should return the details of the contact successfully', async () => {
+      jest.spyOn(contactInstance, 'details').mockImplementation((contactId: number) => {
+        return of(
+          CreateAccountContactResponseStub(
+            200,
+            true,
+            AccountContactDetailsStub().find((contact) => contact.id === contactId),
+          ),
+        );
+      });
+      const response = await lastValueFrom(contactInstance.details(2506));
+      expect(response.statusCode).toBe(200);
+      expect(response.data.id).toEqual(2506);
     });
   });
 
