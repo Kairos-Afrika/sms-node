@@ -248,9 +248,6 @@ interface IContactsOptions {
     }
 }
 ```
-##### setPage()
-##### setSize()
-
 ##### List All Contacts
 ##### asList()
 Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform by calling `asList()`
