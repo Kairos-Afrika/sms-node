@@ -107,7 +107,7 @@ export default class Contacts {
    * @param body is optional if passed already in the contacts() constructor
    * @param body - {name: "", phone: "", dateOfBirth: ""}
    */
-  create(body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>) {
+  create(body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>): Observable<IResponse<IContacts>> {
     if (!body && !this.payload) {
       return of(
         buildSMSResponse(
@@ -124,6 +124,29 @@ export default class Contacts {
       })
       .pipe(
         map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact created successfully`, response?.data, true)),
+        catchError((err) =>
+          of(
+            buildSMSResponse(
+              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.data?.message,
+              err,
+              false,
+            ),
+          ),
+        ),
+      );
+  }
+
+  /**
+   * Get the details of a particular contact
+   * @param contactId id of the contact to get the details
+   * @returns an observable or promise of the contact details
+   */
+  details(contactId: number): Observable<IResponse<IContacts>> {
+    return Api(this.config)
+      .get(APIEndpoints.GET_CONTACT_DETAILS.replace('{id}', contactId as unknown as string))
+      .pipe(
+        map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact details`, response?.data, true)),
         catchError((err) =>
           of(
             buildSMSResponse(
