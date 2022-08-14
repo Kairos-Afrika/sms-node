@@ -159,4 +159,69 @@ export default class Contacts {
         ),
       );
   }
+
+  /**
+   * Update the contact details
+   * @param contactId - id of the contact to be updated
+   * @param body - payload of the contact to be updated
+   * @returns an observable or promise of the updated contact details
+   */
+  update(
+    contactId: number,
+    body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>,
+  ): Observable<IResponse<IContacts>> {
+    if (!body && !this.payload) {
+      return of(
+        buildSMSResponse(
+          HttpStatusCode.BAD_REQUEST,
+          'Invalid request body passed',
+          { message: 'Request body must be an object' },
+          false,
+        ),
+      );
+    }
+
+    return Api(this.config)
+      .put(APIEndpoints.UPDATE_CONTACT_DETAILS.replace('{id}', contactId as unknown as string), {
+        ...(body ? body : this.payload),
+      })
+      .pipe(
+        map((response) =>
+          buildSMSResponse(HttpStatusCode.OK, `Contact details updated successfully`, response?.data, true),
+        ),
+        catchError((err) =>
+          of(
+            buildSMSResponse(
+              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.data?.message,
+              err,
+              false,
+            ),
+          ),
+        ),
+      );
+  }
+
+  /**
+   * Delete a contact details
+   * @param contactId - id of the contact to be deleted
+   * @returns an observable or a promise of the deleted contact
+   */
+  delete(contactId: number): Observable<IResponse<IContacts>> {
+    return Api(this.config)
+      .delete(APIEndpoints.DELETE_CONTACT_DETAILS.replace('{id}', contactId as unknown as string))
+      .pipe(
+        map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact deleted successfully`, response?.data, true)),
+        catchError((err) =>
+          of(
+            buildSMSResponse(
+              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              err?.response?.data?.message,
+              err,
+              false,
+            ),
+          ),
+        ),
+      );
+  }
 }
