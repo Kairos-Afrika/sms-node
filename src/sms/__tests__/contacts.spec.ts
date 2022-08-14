@@ -135,18 +135,57 @@ describe('Contacts List', function () {
       contactInstance = new Contacts(KairosConfigOptions);
     });
     it('should return the details of the contact successfully', async () => {
-      jest.spyOn(contactInstance, 'details').mockImplementation((contactId: number) => {
-        return of(
-          CreateAccountContactResponseStub(
-            200,
-            true,
-            AccountContactDetailsStub().find((contact) => contact.id === contactId),
-          ),
-        );
+      jest.spyOn(contactInstance, 'details').mockImplementation(() => {
+        return of(CreateAccountContactResponseStub(200, true, AccountContactDetailsStub()));
       });
       const response = await lastValueFrom(contactInstance.details(2506));
       expect(response.statusCode).toBe(200);
       expect(response.data.id).toEqual(2506);
+    });
+  });
+
+  describe('Update A Contact', function () {
+    let contactInstance: Contacts;
+    beforeEach(() => {
+      contactInstance = new Contacts(KairosConfigOptions);
+    });
+    it('should return the updated details of a contact', async () => {
+      jest.spyOn(contactInstance, 'update').mockImplementation((contactId: number, body: any) => {
+        return of(
+          CreateAccountContactResponseStub(
+            200,
+            true,
+            AccountContactDetailsStub(),
+            'Contact details updated successfully',
+          ),
+        );
+      });
+      const response = await lastValueFrom(contactInstance.update(2506, AccountContactDetailsStub()));
+      expect(response.statusCode).toBe(200);
+      expect(response.data.id).toEqual(2506);
+      expect(contactInstance.update).toBeCalledTimes(1);
+      expect(contactInstance.update).toBeCalledWith(2506, AccountContactDetailsStub());
+      expect(response.statusMessage).toBe('Contact details updated successfully');
+    });
+  });
+
+  describe('Delete A Contact', function () {
+    let contactInstance: Contacts;
+    beforeEach(() => {
+      contactInstance = new Contacts(KairosConfigOptions);
+    });
+    it('should delete a contact and return a successful response', async () => {
+      jest.spyOn(contactInstance, 'delete').mockImplementation((contactId: number) => {
+        return of(
+          CreateAccountContactResponseStub(200, true, AccountContactDetailsStub(), 'Contact deleted successfully'),
+        );
+      });
+      const response = await lastValueFrom(contactInstance.delete(2506));
+      expect(contactInstance.delete).toBeCalledTimes(1);
+      expect(contactInstance.delete).toBeCalledWith(2506);
+      expect(response.statusCode).toBe(200);
+      expect(response.data.id).toEqual(2506);
+      expect(response.statusMessage).toBe('Contact deleted successfully');
     });
   });
 

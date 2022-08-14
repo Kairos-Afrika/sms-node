@@ -39,10 +39,15 @@ export const CreateAccountContactStub = () => {
 };
 
 export const AccountContactDetailsStub = () => {
-  return [AccountContacts];
+  return AccountContacts;
 };
 
-export const CreateAccountContactResponseStub = (statusCode?: number, success?: boolean, data?: any) => {
+export const CreateAccountContactResponseStub = (
+  statusCode?: number,
+  success?: boolean,
+  data?: any,
+  message?: string,
+) => {
   return {
     ...AccountContactsResponse,
     ...(data && {
@@ -53,6 +58,9 @@ export const CreateAccountContactResponseStub = (statusCode?: number, success?: 
     }),
     ...(success !== undefined && {
       success,
+    }),
+    ...(message && {
+      statusMessage: message,
     }),
   };
 };
