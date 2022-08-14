@@ -397,6 +397,24 @@ response$.subscribe((data) => {
 })
 ```
 
+Note that the contact method is also exposed as a static method which can be accessed by doing this
+```js
+import {KairosSMS} from "@kairosafrika/sms"
+KairosSMS
+     .contacts({
+        apiKey: 'xxxxxxxxxx',
+        apiSecret: 'xxxxxxxxxxx'
+     }, {
+        body: {
+          name: "Jane Doe",
+          phone: "0203746417",
+          dateOfBirth: null
+        }
+     }).create().subscribe(data => {
+        // handle response here
+        console.log(data)
+     })
+```
 > NB. Don't forget that the instance you'll create will contain the `apiKey` & `apiSecret` with an optional `timeout`
 
 
