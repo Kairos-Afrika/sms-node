@@ -236,15 +236,15 @@ Contacts method also exposes a handful of functions that to allow you to GET,PAT
 
 **The `contacts()` method accept an optional **options** parameter of type IContactsOptions which is of the format**
 ```js
-const options = {
+interface IContactsOptions {
     paginate: {
-        page: 1,
-        size: 15
+        page: number;
+        size: number;
     },
     body: {
-        name: "Jane Doe",
-        phone: "xxxxxxxxxx",
-        dateOfBirth: null
+        name: string;
+        phone: string;
+        dateOfBirth?: string
     }
 }
 ```
