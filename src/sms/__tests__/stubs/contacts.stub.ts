@@ -1,5 +1,5 @@
 import { IContacts, IPagination, IResponse } from '../../types/interfaces';
-import { AccountContactsList, AccountContactsResponse } from '../mocks/mocks';
+import { AccountContacts, AccountContactsList, AccountContactsResponse } from '../mocks/mocks';
 
 export const AccountContactsStub = (
   statusCode: number,
@@ -36,6 +36,10 @@ export const CreateAccountContactStub = () => {
     phone: '0500949999',
     dateOfBirth: null,
   };
+};
+
+export const AccountContactDetailsStub = () => {
+  return [AccountContacts];
 };
 
 export const CreateAccountContactResponseStub = (statusCode?: number, success?: boolean, data?: any) => {
