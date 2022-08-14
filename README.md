@@ -232,6 +232,8 @@ Contacts method also exposes a handful of functions that to allow you to GET,PAT
 | GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
 | POST      | create()                       | Create a new contact by calling the create() method    | :heavy_check_mark:   |
 | GET       | details()                      | Get the details of a particular contact                | :heavy_check_mark:   | 
+
+
 **The `contacts()` method accept an optional **options** parameter of type IContactsOptions which is of the format**
 ```js
 const options = {
