@@ -252,7 +252,7 @@ interface IContactsOptions {
 ##### asList()
 Get a paginated list of your contacts from the Kairos Afrika Bulk SMS Platform by calling `asList()`
 
-#### Example #1
+##### Example #1
 
 Make a request by passing *page* and *size* directly to the `contacts()` method
 ```js
@@ -270,7 +270,7 @@ instance
     })
 ```
 
-#### Example #2
+##### Example #2
 
 Make a request by performing method chaining
 ```js
@@ -293,7 +293,7 @@ Options  - the current page and the total size to show per page
     size: 15
 }
 ```
-#### Example #3
+##### Example #3
 ```js
 const response = KairosSMS
     .contacts(configs, {
