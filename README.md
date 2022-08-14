@@ -231,7 +231,7 @@ Contacts method also exposes a handful of functions that to allow you to GET,PAT
 |-----------|--------------------------------|--------------------------------------------------------|----------------------|
 | GET       | setPage(), setSize(), asList() | Get a paginated list of all your contacts              |  :heavy_check_mark:  |
 | POST      | create()                       | Create a new contact by calling the create() method    | :heavy_check_mark:   |
- 
+| GET       | details()                      | Get the details of a particular contact                | :heavy_check_mark:   | 
 **The `contacts()` method accept an optional **options** parameter of type IContactsOptions which is of the format**
 ```js
 const options = {
@@ -335,11 +335,21 @@ response$.subscribe(data => {
 You can also pass the body of the contact to be created directly to the create method that's exposed by the `contacts()` method.
 ```js
 const response$ = instance.contacts().create({
-    name: "Achemapong",
-    phone: "0200746417",
-    dateOfBirth: null
+    name: "Jane Doe",
+    phone: "0203746417",
+    dateOfBirth: "2022-01-01"
 })
 response$.subscribe(data => {
+    // handle response here
+    console.log(data)
+})
+```
+
+##### Get a Contact Details
+Get the details of a particular contact by passing the **id** as a parameter
+```js
+const response$ = instance.contacts().details(12)
+response$.subscribe((data) => {
     // handle response here
     console.log(data)
 })
