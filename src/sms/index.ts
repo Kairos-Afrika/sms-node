@@ -1,7 +1,7 @@
 import { IBulkSMSBody, IContactsOptions, IKairosSMSOptions, ISingleSMSBody } from './types/interfaces';
 import { SendSms } from './services/send-sms';
 import { Account } from './services/account';
-import Contacts from './services/contacts';
+import { Contacts } from './services/contacts';
 
 class KairosSMS {
   private readonly config: IKairosSMSOptions;

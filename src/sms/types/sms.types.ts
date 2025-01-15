@@ -27,7 +27,10 @@ export interface SMSBody {
   readonly type?: SMSType;
 }
 
-export interface SingleSMSBody extends SMSBody {}
+/**
+ * Type for single SMS message body
+ */
+export type SingleSMSBody = SMSBody;
 
 export interface BulkSMSBody {
   readonly messages: ReadonlyArray<SMSBody>;

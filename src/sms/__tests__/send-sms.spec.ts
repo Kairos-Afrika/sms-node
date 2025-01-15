@@ -3,15 +3,14 @@ import { BulkSMSBody, KairosConfigOptions, QuickSMSBody } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
 import { SMSResponseStub } from './stubs/quick-sms.stub';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
+import { buildSMSResponse } from '../utils/helpers';
 
 jest.mock('../services/send-sms', () => {
   return {
     SendSms: jest.fn().mockImplementation(() => {
       return {
-        asQuick: () => jest.fn(),
-        asQuickMultipleMSISDN: () => jest.fn(),
-        asPing: () => jest.fn(),
-        asBulk: () => jest.fn(),
+        sendQuick: () => jest.fn(),
+        sendFlash: () => jest.fn(),
       };
     }),
   };
@@ -33,50 +32,71 @@ describe('Send SMS', function () {
     });
 
     it('should return a successful response for a quick sms', async () => {
-      jest.spyOn(sendSmsInstance, 'asQuick').mockImplementation(() => {
-        return of(SMSResponseStub(200, true, true));
+      jest.spyOn(sendSmsInstance, 'sendQuick').mockImplementation(() => {
+        return of(buildSMSResponse(
+          HttpStatusCode.OK,
+          'Message sent successfully',
+          { messageId: '123', status: 'sent' },
+          true
+        ));
       });
-      const response = await lastValueFrom(sendSmsInstance.asQuick());
+      const response = await lastValueFrom(sendSmsInstance.sendQuick());
       expect(response.data).toBeTruthy();
-      expect(response.statusCode).toBe(200);
+      expect(response.statusCode).toBe(HttpStatusCode.OK);
       expect(response.success).toBeTruthy();
     });
 
     it('should return a failed response for a quick sms', async () => {
-      jest.spyOn(sendSmsInstance, 'asQuick').mockImplementation(() => {
-        return of(SMSResponseStub(403, { message: 'Account is low on credit' }, false));
+      jest.spyOn(sendSmsInstance, 'sendQuick').mockImplementation(() => {
+        return of(buildSMSResponse(
+          HttpStatusCode.FORBIDDEN,
+          'Account is low on credit',
+          { message: 'Account is low on credit' },
+          false
+        ));
       });
-      const response = await lastValueFrom(sendSmsInstance.asQuick());
+      const response = await lastValueFrom(sendSmsInstance.sendQuick());
       expect(response).toBeDefined();
-      expect(response.data).toHaveProperty(['message']);
-      expect(response.data.message).toBe('Account is low on credit');
-      expect(response.statusCode).toBe(403);
-    });
-
-    it('should return a bad request', async () => {
-      jest.spyOn(sendSmsInstance, 'asBulk').mockImplementation(() => {
-        return of(SMSResponseStub(HttpStatusCode.BAD_REQUEST, { message: 'Request body must be an array' }, false));
-      });
-      const response = await lastValueFrom(sendSmsInstance.asBulk());
-      expect(response).toBeDefined();
-      expect(response.data.message).toBe('Request body must be an array');
-      expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
+      expect(response.data).toHaveProperty('message');
+      expect(response.statusCode).toBe(HttpStatusCode.FORBIDDEN);
+      expect(response.success).toBeFalsy();
     });
   });
 
-  describe('SMS Bulk Requests', function () {
+  describe('SMS Flash Requests', function () {
     beforeEach(() => {
-      sendSmsInstance = new SendSms(KairosConfigOptions, BulkSMSBody);
+      sendSmsInstance = new SendSms(KairosConfigOptions, QuickSMSBody);
     });
 
-    it('should return a successful response for bulk sms', async () => {
-      jest.spyOn(sendSmsInstance, 'asBulk').mockImplementation(() => {
-        return of(SMSResponseStub(HttpStatusCode.OK, true, true));
+    it('should return a successful response for a flash sms', async () => {
+      jest.spyOn(sendSmsInstance, 'sendFlash').mockImplementation(() => {
+        return of(buildSMSResponse(
+          HttpStatusCode.OK,
+          'Flash message sent successfully',
+          { messageId: '123', status: 'sent' },
+          true
+        ));
       });
-      const response = await lastValueFrom(sendSmsInstance.asBulk());
-      expect(response).toBeDefined();
+      const response = await lastValueFrom(sendSmsInstance.sendFlash());
       expect(response.data).toBeTruthy();
       expect(response.statusCode).toBe(HttpStatusCode.OK);
+      expect(response.success).toBeTruthy();
+    });
+
+    it('should return a failed response for a flash sms', async () => {
+      jest.spyOn(sendSmsInstance, 'sendFlash').mockImplementation(() => {
+        return of(buildSMSResponse(
+          HttpStatusCode.FORBIDDEN,
+          'Account is low on credit',
+          { message: 'Account is low on credit' },
+          false
+        ));
+      });
+      const response = await lastValueFrom(sendSmsInstance.sendFlash());
+      expect(response).toBeDefined();
+      expect(response.data).toHaveProperty('message');
+      expect(response.statusCode).toBe(HttpStatusCode.FORBIDDEN);
+      expect(response.success).toBeFalsy();
     });
   });
 
