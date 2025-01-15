@@ -9,8 +9,10 @@ import { IResponse } from './types/interfaces';
 
 /**
  * Converts an observable to a promise and resolves the last value of the observed response
- * @param func
+ * @template T - Type of the response data
+ * @param func - Observable to convert to Promise
+ * @returns Promise that resolves with the response
  */
-export const asPromise = (func: Observable<IResponse<any>>): Promise<any> => {
+export const asPromise = <T>(func: Observable<IResponse<T>>): Promise<IResponse<T>> => {
   return lastValueFrom(func);
 };
