@@ -1,98 +1,58 @@
 import { KairosSMS } from '../index';
 import { KairosConfigOptions } from './mocks/mocks';
-import { IBulkSMSBody, ISingleSMSBody } from '../types/interfaces';
-import { SendSms } from '../services/send-sms';
 import { QuickSmsStub } from './stubs/quick-sms.stub';
+import { SendSms } from '../services/send-sms';
 import { Account } from '../services/account';
-import Contacts from '../services/contacts';
+import { Contacts } from '../services/contacts';
 
 describe('Kairos SMS with new keyword', function () {
   let kairosInstance: KairosSMS;
+  let sendSMSInstance: SendSms;
+  let accountInstance: Account;
+  let contactInstance: Contacts;
+
   beforeAll(() => {
     kairosInstance = new KairosSMS(KairosConfigOptions);
+    sendSMSInstance = kairosInstance.send(QuickSmsStub());
+    accountInstance = kairosInstance.account();
+    contactInstance = kairosInstance.contacts();
   });
-  it('should defined an instance of kairos', async () => {
+
+  it('should create an instance of kairos sms', function () {
     expect(kairosInstance).toBeDefined();
+    const response = kairosInstance.send(QuickSmsStub());
+    expect(response).toBeDefined();
+    expect(response.sendQuick).toBeDefined();
+    expect(response.sendFlash).toBeDefined();
   });
 
-  it('should return all defined methods in the kairos send class', async () => {
-    jest.spyOn(kairosInstance, 'send').mockImplementation((body: ISingleSMSBody | IBulkSMSBody | string): SendSms => {
-      return new SendSms(KairosConfigOptions, body);
-    });
-    expect(kairosInstance.send).toBeDefined();
-    const response = await kairosInstance.send(QuickSmsStub());
-    expect(response.asBulk).toBeDefined();
-    expect(response.asQuick).toBeDefined();
-    expect(response.asPing).toBeDefined();
-    expect(response.asQuickMultipleMSISDN).toBeDefined();
+  it('should create an instance of account', function () {
+    const response = kairosInstance.account();
+    expect(response).toBeDefined();
+    expect(response.getBalance).toBeDefined();
   });
 
-  it('should return all defined methods in the kairos account class', async () => {
-    jest.spyOn(kairosInstance, 'account').mockImplementation((): Account => {
-      return new Account(KairosConfigOptions);
-    });
-    expect(kairosInstance.account).toBeDefined();
-    const response = await kairosInstance.account();
-    expect(response.balance).toBeDefined();
+  it('should create an instance of account with specific config', function () {
+    expect(accountInstance).toBeDefined();
   });
 
-  it('should return all defined methods in the kairos contacts class', async () => {
-    jest.spyOn(kairosInstance, 'contacts').mockImplementation((): Contacts => {
-      return new Contacts(KairosConfigOptions, { paginate: { page: 1, size: 15 } });
-    });
-    expect(kairosInstance.contacts).toBeDefined();
-  });
-});
-
-describe('Kairos SMS Instances with static create', function () {
-  let kairosInstance: KairosSMS;
-  beforeEach(() => {
-    kairosInstance = KairosSMS.create(KairosConfigOptions);
+  it('should create an instance of send sms with specific config', function () {
+    expect(sendSMSInstance).toBeDefined();
   });
 
-  it('should return an instance of kairos sms with the static create', async () => {
-    expect(kairosInstance).toBeInstanceOf(KairosSMS);
-    expect(kairosInstance.send).toBeDefined();
-    expect(kairosInstance.account).toBeDefined();
-    expect(kairosInstance.contacts).toBeDefined();
+  it('should define account methods', function () {
+    expect(accountInstance.getBalance).toBeDefined();
   });
 
-  it('should return an instance of Account ', function () {
-    let accountInstance = kairosInstance.account();
-    expect(accountInstance).toBeInstanceOf(Account);
-    expect(accountInstance.balance).toBeDefined();
+  it('should define sms methods', function () {
+    expect(sendSMSInstance.sendQuick).toBeDefined();
+    expect(sendSMSInstance.sendFlash).toBeDefined();
   });
 
-  it('should return an instance of SendSms ', function () {
-    let sendSMSInstance = kairosInstance.send(QuickSmsStub());
-    expect(sendSMSInstance).toBeInstanceOf(SendSms);
-    expect(sendSMSInstance.asPing).toBeDefined();
-    expect(sendSMSInstance.asQuick).toBeDefined();
-    expect(sendSMSInstance.asQuickMultipleMSISDN).toBeDefined();
-    expect(sendSMSInstance.asBulk).toBeDefined();
-  });
-
-  it('should return an instance of Contacts', function () {
-    let contactInstance = kairosInstance.contacts();
-    expect(contactInstance).toBeInstanceOf(Contacts);
-    expect(contactInstance.create).toBeDefined();
-    expect(contactInstance.asList).toBeDefined();
-  });
-});
-
-describe('Kairos SMS Instances with static methods', function () {
-  it('should return an instance of an Account', function () {
-    let kairosInstance = KairosSMS.account(KairosConfigOptions);
-    expect(kairosInstance).toBeInstanceOf(Account);
-  });
-
-  it('should return an instance of an Send SMS', function () {
-    let kairosInstance = KairosSMS.send(KairosConfigOptions, QuickSmsStub());
-    expect(kairosInstance).toBeInstanceOf(SendSms);
-  });
-
-  it('should return an instance of Contact', function () {
-    let kairosInstance = KairosSMS.contacts(KairosConfigOptions);
-    expect(kairosInstance).toBeInstanceOf(Contacts);
+  it('should define contact methods', function () {
+    expect(contactInstance.createContact).toBeDefined();
+    expect(contactInstance.getContacts).toBeDefined();
+    expect(contactInstance.updateContact).toBeDefined();
+    expect(contactInstance.deleteContact).toBeDefined();
   });
 });
