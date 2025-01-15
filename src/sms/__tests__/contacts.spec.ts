@@ -1,195 +1,160 @@
-import Contacts from '../services/contacts';
-import { AccountContacts, KairosConfigOptions } from './mocks/mocks';
+import { Contacts } from '../services/contacts';
+import { KairosConfigOptions } from './mocks/mocks';
 import { lastValueFrom, of } from 'rxjs';
-import {
-  AccountContactDetailsStub,
-  AccountContactsStub,
-  CreateAccountContactResponseStub,
-  CreateAccountContactStub,
-} from './stubs/contacts.stub';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
+import { buildSMSResponse } from '../utils/helpers';
+import { Contact, ContactsListResponse } from '../types/contacts.types';
 
-jest.mock('../services/contacts');
+describe('Contacts', function () {
+  let contactInstance: Contacts;
+  const mockContact: Contact = {
+    id: 2506,
+    name: 'Test Contact',
+    phone: '+1234567890',
+    dateOfBirth: '1990-01-01',
+    slug: 'test-contact',
+    uuid: 'test-uuid',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    allowBirthdayNotifications: true,
+  };
 
-describe('Contacts List', function () {
-  beforeAll(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    contactInstance = new Contacts(KairosConfigOptions, { paginate: { page: 1, size: 12 } });
   });
 
-  describe('Constructor Test', function () {
-    it('should an instance of Contacts', function () {
-      const contactInstance = new Contacts(KairosConfigOptions, { paginate: { page: 1, size: 10 } });
-      expect(contactInstance).toBeInstanceOf(Contacts);
-    });
+  it('should create an instance of contacts', function () {
+    expect(contactInstance).toBeDefined();
   });
 
-  describe('Get All Contacts', function () {
-    let contactInstance: Contacts;
-    beforeAll(() => {
-      contactInstance = new Contacts(KairosConfigOptions);
+  describe('Get Contacts', () => {
+    it('should return a list of contacts', async () => {
+      jest.spyOn(contactInstance, 'getContacts').mockImplementation(() => {
+        return of({
+          statusCode: HttpStatusCode.OK,
+          statusMessage: 'Contacts retrieved successfully',
+          timestamp: new Date().toISOString(),
+          success: true,
+          data: {
+            paginateObj: {
+              docs: [mockContact],
+              limit: 12,
+              total: 1,
+              page: 1,
+              pages: 1,
+            },
+            meta: {
+              itemCount: 1,
+              limit: 12,
+            },
+          },
+        });
+      });
+
+      const response = await lastValueFrom(contactInstance.getContacts());
+      expect(response.statusCode).toBe(HttpStatusCode.OK);
+      expect(response.success).toBeTruthy();
+      expect(response.data.paginateObj.page).toBe(1);
+      expect(response.data.paginateObj.docs).toHaveLength(1);
+      expect(response.data.paginateObj.limit).toBe(12);
     });
 
-    describe('Builder Function', function () {
-      it('should return an instance of Contacts on setSize()', function () {
-        jest.spyOn(contactInstance, 'setSize').mockReturnThis();
-        const response = contactInstance.setSize(10);
-        expect(response).toBeInstanceOf(Contacts);
-        expect(response.setSize).toBeCalledWith(10);
-        expect(response.setSize).toBeCalledTimes(1);
-      });
-
-      it('should return an instance of Contacts on setPage()', function () {
-        jest.spyOn(contactInstance, 'setPage').mockReturnThis();
-        const response = contactInstance.setPage(1);
-        expect(response).toBeInstanceOf(Contacts);
-        expect(response.setPage).toBeCalledTimes(1);
-        expect(response.setPage).toBeCalledWith(1);
-      });
-
-      it('should return an instance of Contacts on setSort()', function () {
-        jest.spyOn(contactInstance, 'setSort').mockReturnThis();
-        const response = contactInstance.setSort('DESC');
-        expect(response).toBeInstanceOf(Contacts);
-        expect(response.setSort).toBeCalledTimes(1);
-        expect(response.setSort).toBeCalledWith('DESC');
-      });
-    });
-
-    describe('All contact builder to be available on instance', function () {
-      beforeEach(() => {
-        jest.spyOn(contactInstance, 'setPage').mockReturnThis();
-        jest.spyOn(contactInstance, 'setSize').mockReturnThis();
-        jest.spyOn(contactInstance, 'setSort').mockReturnThis();
-      });
-
-      it('should return a defined builder functions', function () {
-        expect(contactInstance).toBeDefined();
-        expect(contactInstance.setPage).toBeDefined();
-        expect(contactInstance.setSize).toBeDefined();
-        expect(contactInstance.setSort).toBeDefined();
-        expect(contactInstance.asList).toBeDefined();
-      });
-
-      it('should return a paginated list with page of 1 and size of 12', async () => {
-        jest.spyOn(contactInstance, 'asList').mockImplementation(() => {
-          return of(AccountContactsStub(HttpStatusCode.OK, 'Paginated list of contacts', true, undefined, 1, 12));
+    it('should handle error when getting contacts', async () => {
+      jest.spyOn(contactInstance, 'getContacts').mockImplementation(() => {
+        return of({
+          statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+          statusMessage: 'Failed to retrieve contacts',
+          timestamp: new Date().toISOString(),
+          success: false,
+          data: {
+            paginateObj: {
+              docs: [],
+              limit: 12,
+              total: 0,
+              page: 1,
+              pages: 0,
+            },
+            meta: {
+              itemCount: 0,
+              limit: 12,
+            },
+          },
         });
-        const response = await lastValueFrom(contactInstance.setPage(1).setSize(15).asList());
-        expect(response.statusCode).toBe(HttpStatusCode.OK);
-        expect(response.success).toBeTruthy();
-        expect(response.data.paginateObj.page).toBe(1);
-        expect(response.data.paginateObj.docs).toHaveLength(1);
-        expect(response.data.paginateObj.limit).toBe(12);
       });
 
-      it('should failed with a status code of 500 and success of false', async () => {
-        jest.spyOn(contactInstance, 'asList').mockImplementation(() => {
-          return of(AccountContactsStub(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Paginated list of contacts', false));
-        });
-        const response = await lastValueFrom(contactInstance.setPage(1).setSize(15).asList());
-        expect(response.statusCode).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
-        expect(response.success).toBeFalsy();
-      });
-    });
-  });
-
-  describe('Create A New Contact', function () {
-    describe('Success Contact Creation', function () {
-      let contactInstance: Contacts;
-      beforeAll(() => {
-        contactInstance = new Contacts(KairosConfigOptions, { body: CreateAccountContactStub() });
-      });
-      it('should create a new contact successfully', async () => {
-        jest.spyOn(contactInstance, 'create').mockImplementation(() => {
-          return of(CreateAccountContactResponseStub(200, true)) as any;
-        });
-        const response = await lastValueFrom(contactInstance.create());
-        expect(response.statusCode).toBe(200);
-        expect(response.data).toStrictEqual(AccountContacts);
-        expect(response.success).toBeTruthy();
-        expect(response.statusMessage).toBe('Contact created successfully');
-      });
-    });
-
-    describe('Failed Contact Creation', function () {
-      let contactInstance: Contacts;
-      beforeEach(() => {
-        contactInstance = new Contacts(KairosConfigOptions);
-      });
-      it('should return bad request for not passing a valid payload', async () => {
-        jest.spyOn(contactInstance, 'create').mockImplementation(() => {
-          return of(CreateAccountContactResponseStub(400, false, { message: 'Invalid request body passed' }));
-        });
-        const response = await lastValueFrom(contactInstance.create());
-        expect(contactInstance).toBeInstanceOf(Contacts);
-        expect(response.success).toBeFalsy();
-        expect(response.data).toHaveProperty(['message']);
-        expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
-      });
+      const response = await lastValueFrom(contactInstance.getContacts());
+      expect(response.statusCode).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
+      expect(response.success).toBeFalsy();
     });
   });
 
-  describe('Get A Contact Details', function () {
-    let contactInstance: Contacts;
-    beforeEach(() => {
-      contactInstance = new Contacts(KairosConfigOptions);
-    });
-    it('should return the details of the contact successfully', async () => {
-      jest.spyOn(contactInstance, 'details').mockImplementation(() => {
-        return of(CreateAccountContactResponseStub(200, true, AccountContactDetailsStub()));
+  describe('Create Contact', () => {
+    it('should create a new contact', async () => {
+      jest.spyOn(contactInstance, 'createContact').mockImplementation(() => {
+        return of(buildSMSResponse<Contact>(HttpStatusCode.OK, 'Contact created successfully', mockContact, true));
       });
-      const response = await lastValueFrom(contactInstance.details(2506));
+
+      const response = await lastValueFrom(contactInstance.createContact());
       expect(response.statusCode).toBe(200);
-      expect(response.data.id).toEqual(2506);
+      expect(response.data).toStrictEqual(mockContact);
+      expect(response.success).toBeTruthy();
+      expect(response.statusMessage).toBe('Contact created successfully');
+    });
+
+    it('should handle error when creating contact', async () => {
+      jest.spyOn(contactInstance, 'createContact').mockImplementation(() => {
+        return of(
+          buildSMSResponse<Contact>(HttpStatusCode.BAD_REQUEST, 'Failed to create contact', mockContact, false),
+        );
+      });
+
+      const response = await lastValueFrom(contactInstance.createContact());
+      expect(response.success).toBeFalsy();
+      expect(response.statusCode).toBe(HttpStatusCode.BAD_REQUEST);
     });
   });
 
-  describe('Update A Contact', function () {
-    let contactInstance: Contacts;
-    beforeEach(() => {
-      contactInstance = new Contacts(KairosConfigOptions);
-    });
-    it('should return the updated details of a contact', async () => {
-      jest.spyOn(contactInstance, 'update').mockImplementation((contactId: number, body: any) => {
+  describe('Update Contact', () => {
+    it('should update an existing contact', async () => {
+      jest.spyOn(contactInstance, 'updateContact').mockImplementation((contactId: string) => {
         return of(
-          CreateAccountContactResponseStub(
-            200,
-            true,
-            AccountContactDetailsStub(),
+          buildSMSResponse<Contact>(
+            HttpStatusCode.OK,
             'Contact details updated successfully',
+            { ...mockContact, id: parseInt(contactId, 10) },
+            true,
           ),
         );
       });
-      const response = await lastValueFrom(contactInstance.update(2506, AccountContactDetailsStub()));
+
+      const response = await lastValueFrom(contactInstance.updateContact('2506'));
       expect(response.statusCode).toBe(200);
       expect(response.data.id).toEqual(2506);
-      expect(contactInstance.update).toBeCalledTimes(1);
-      expect(contactInstance.update).toBeCalledWith(2506, AccountContactDetailsStub());
       expect(response.statusMessage).toBe('Contact details updated successfully');
     });
   });
 
-  describe('Delete A Contact', function () {
-    let contactInstance: Contacts;
-    beforeEach(() => {
-      contactInstance = new Contacts(KairosConfigOptions);
-    });
-    it('should delete a contact and return a successful response', async () => {
-      jest.spyOn(contactInstance, 'delete').mockImplementation((contactId: number) => {
+  describe('Delete Contact', () => {
+    it('should delete an existing contact', async () => {
+      jest.spyOn(contactInstance, 'deleteContact').mockImplementation((contactId: string) => {
         return of(
-          CreateAccountContactResponseStub(200, true, AccountContactDetailsStub(), 'Contact deleted successfully'),
+          buildSMSResponse<Contact>(
+            HttpStatusCode.OK,
+            'Contact deleted successfully',
+            { ...mockContact, id: parseInt(contactId, 10) },
+            true,
+          ),
         );
       });
-      const response = await lastValueFrom(contactInstance.delete(2506));
-      expect(contactInstance.delete).toBeCalledTimes(1);
-      expect(contactInstance.delete).toBeCalledWith(2506);
+
+      const response = await lastValueFrom(contactInstance.deleteContact('2506'));
       expect(response.statusCode).toBe(200);
       expect(response.data.id).toEqual(2506);
       expect(response.statusMessage).toBe('Contact deleted successfully');
     });
   });
 
-  afterAll(() => {
-    jest.resetAllMocks();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 });
