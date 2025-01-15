@@ -1,139 +1,96 @@
-import { IBulkSMSBody, IKairosSMSOptions, IResponse, ISingleSMSBody } from '../types/interfaces';
+import { Observable, catchError, map, of } from 'rxjs';
+import { KairosSMSConfig } from '../types/config.types';
+import { BulkSMSBody, SingleSMSBody } from '../types/sms.types';
+import { ApiResponse } from '../types/common.types';
 import { Api } from '../api';
 import { APIEndpoints } from '../constants/api-endpoints.constants';
-import { catchError, map, Observable, of } from 'rxjs';
 import { buildSMSResponse } from '../utils/helpers';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
 
-class SendSms {
+type SMSInput = SingleSMSBody | BulkSMSBody | string;
+type SMSResponse = ApiResponse<unknown>;
+
+/**
+ * Service for sending SMS messages
+ */
+export class SendSms {
   /**
-   * API call x-access-token and x-access-secret configurations here
+   * Creates an instance of SendSms service
+   * @param config - Configuration for API authentication
+   * @param messageData - SMS message data to be sent
+   */
+  constructor(
+    private readonly config: KairosSMSConfig,
+    private readonly messageData: SMSInput,
+  ) {}
+
+  /**
+   * Sends a quick SMS message
+   * @returns Observable with the send operation result
+   */
+  public sendQuick(): Observable<SMSResponse> {
+    const endpoint = this.determineQuickEndpoint();
+    return this.sendMessage(endpoint);
+  }
+
+  /**
+   * Sends a flash SMS message
+   * @returns Observable with the send operation result
+   */
+  public sendFlash(): Observable<SMSResponse> {
+    const endpoint = this.determineFlashEndpoint();
+    return this.sendMessage(endpoint);
+  }
+
+  /**
+   * Determines the appropriate endpoint for quick SMS
    * @private
    */
-  private readonly config;
+  private determineQuickEndpoint(): string {
+    if (typeof this.messageData === 'string') {
+      return APIEndpoints.SEND_QUICK_SMS_STRING;
+    }
+    return 'messages' in this.messageData
+      ? APIEndpoints.SEND_BULK_QUICK_SMS
+      : APIEndpoints.SEND_QUICK_SMS;
+  }
+
   /**
-   * Request body to be passed for sending the sms
+   * Determines the appropriate endpoint for flash SMS
    * @private
    */
-  private readonly data;
-
-  /**
-   * A constructor definition for setting Kairos SMS API credentials and request body
-   * @param config
-   * @param data
-   */
-  constructor(config: IKairosSMSOptions, data: ISingleSMSBody | IBulkSMSBody | string) {
-    this.config = config;
-    this.data = data;
+  private determineFlashEndpoint(): string {
+    if (typeof this.messageData === 'string') {
+      return APIEndpoints.SEND_FLASH_SMS_STRING;
+    }
+    return 'messages' in this.messageData
+      ? APIEndpoints.SEND_BULK_FLASH_SMS
+      : APIEndpoints.SEND_FLASH_SMS;
   }
 
   /**
-   * Send the sms as a quick one
+   * Sends the SMS message to the specified endpoint
+   * @param endpoint - API endpoint for sending the message
+   * @returns Observable with the send operation result
    */
-  asQuick(): Observable<IResponse<any>> {
-    if (typeof this.data !== 'object') {
-      of(
-        buildSMSResponse(
-          HttpStatusCode.BAD_REQUEST,
-          'Invalid request body passed',
-          { message: 'Request body must be an object' },
-          false,
-        ),
-      );
-    }
+  private sendMessage(endpoint: string): Observable<SMSResponse> {
     return Api(this.config)
-      .post(APIEndpoints.SEND_QUICK_SMS, this.data as ISingleSMSBody)
+      .post(endpoint, this.messageData)
       .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS successfully scheduled`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
+        map((response) =>
+          buildSMSResponse<unknown>(
+            HttpStatusCode.OK,
+            'Message sent successfully',
+            response?.data,
+            true,
           ),
         ),
-      );
-  }
-
-  asQuickMultipleMSISDN() {
-    return Api(this.config)
-      .post(APIEndpoints.SEND_QUICK_MULTIPLE_MSISDN, this.data as ISingleSMSBody)
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS successfully scheduled`, response?.data, true)),
-        catchError((err) =>
+        catchError((error) =>
           of(
-            buildSMSResponse(
-              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
-          ),
-        ),
-      );
-  }
-
-  /**
-   * Send sms as bulk sms
-   */
-  asBulk(): Observable<IResponse<any>> {
-    if (
-      !Object(this.data as IBulkSMSBody).hasOwnProperty('messages') ||
-      !Array.isArray((this.data as IBulkSMSBody)?.messages)
-    ) {
-      return of(
-        buildSMSResponse(
-          HttpStatusCode.BAD_REQUEST,
-          'Invalid request body passed',
-          { message: `Request body must be an array` },
-          false,
-        ),
-      );
-    }
-    return Api(this.config)
-      .post(APIEndpoints.SEND_BULK_SMS, this.data as IBulkSMSBody)
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `Bulk SMS successfully scheduled`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
-          ),
-        ),
-      );
-  }
-
-  /**
-   * Ping the status of a sent sms
-   */
-  asPing(): Observable<IResponse<any>> {
-    if (typeof this.data !== 'string') {
-      return of(
-        buildSMSResponse(
-          HttpStatusCode.BAD_REQUEST,
-          'Invalid path params passed',
-          { message: 'URl accept the id of sent message' },
-          false,
-        ),
-      );
-    }
-    return Api(this.config)
-      .get(APIEndpoints.PING_SMS_STATUS.replace('{sms_id}', this.data as string))
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `SMS response details`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
+            buildSMSResponse<unknown>(
+              error?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              error?.response?.data?.message ?? 'Failed to send message',
+              error,
               false,
             ),
           ),
@@ -141,5 +98,3 @@ class SendSms {
       );
   }
 }
-
-export { SendSms };
