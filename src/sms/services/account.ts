@@ -1,33 +1,43 @@
-import { IKairosSMSOptions } from '../types/interfaces';
+import { Observable, catchError, map, of } from 'rxjs';
+import { KairosSMSConfig } from '../types/config.types';
+import { AccountBalanceResponse, Balance } from '../types/account.types';
 import { Api } from '../api';
 import { APIEndpoints } from '../constants/api-endpoints.constants';
-import { catchError, map, of } from 'rxjs';
 import { buildSMSResponse } from '../utils/helpers';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
 
-class Account {
+/**
+ * Service for managing account-related operations
+ */
+export class Account {
   /**
-   * API call x-access-token and x-access-secret configurations here
-   * @private
+   * Creates an instance of Account service
+   * @param config - Configuration for API authentication
    */
-  private readonly config;
-  constructor(config: IKairosSMSOptions) {
-    this.config = config;
-  }
+  constructor(private readonly config: KairosSMSConfig) {}
 
-  balance() {
+  /**
+   * Retrieves the current account balance
+   * @returns Observable with account balance information
+   */
+  public getBalance(): Observable<AccountBalanceResponse> {
     return Api(this.config)
       .get(APIEndpoints.GET_ACCOUNT_BALANCE)
       .pipe(
         map((response) =>
-          buildSMSResponse(HttpStatusCode.OK, `Current customer account balance`, response?.data, true),
+          buildSMSResponse<Balance>(
+            HttpStatusCode.OK,
+            'Current customer account balance',
+            response?.data,
+            true,
+          ),
         ),
-        catchError((err) =>
+        catchError((error) =>
           of(
-            buildSMSResponse(
-              err?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
+            buildSMSResponse<Balance>(
+              error?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+              error?.response?.data?.message ?? 'Failed to get balance',
+              error,
               false,
             ),
           ),
@@ -35,5 +45,3 @@ class Account {
       );
   }
 }
-
-export { Account };

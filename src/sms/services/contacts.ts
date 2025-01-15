@@ -1,227 +1,153 @@
+import { Observable, catchError, map, of } from 'rxjs';
+import { KairosSMSConfig } from '../types/config.types';
 import {
-  IContacts,
-  IContactsOptions,
-  IItemsPerPage,
-  IKairosSMSOptions,
-  IPagination,
-  IResponse,
-  SORT_ITEMS,
-} from '../types/interfaces';
-import { catchError, map, Observable, of } from 'rxjs';
-import { APIEndpoints } from '../constants/api-endpoints.constants';
+  Contact,
+  ContactCreateInput,
+  ContactResponse,
+  ContactsListResponse,
+  ContactsOptions,
+  ContactPaginatedResponse,
+} from '../types/contacts.types';
 import { Api } from '../api';
+import { APIEndpoints } from '../constants/api-endpoints.constants';
 import { buildSMSResponse } from '../utils/helpers';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
+import { ApiResponse } from '../types/common.types';
 
-export default class Contacts {
-  private readonly config: IKairosSMSOptions;
-  private page: number = 1;
-  private size: number = 15;
-  private sort: string = 'DESC';
-  private readonly payload: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'> = {
+/**
+ * Service for managing contacts
+ */
+export class Contacts {
+  private readonly defaultPage = 1;
+  private readonly defaultSize = 15;
+  private readonly defaultSort = 'DESC';
+  private readonly defaultPayload: ContactCreateInput = {
     name: '',
     phone: '',
     dateOfBirth: null,
   };
 
-  constructor(config: IKairosSMSOptions, options?: IContactsOptions) {
-    this.config = config;
-    if (options) {
-      if (options.paginate) {
-        this.page = options.paginate?.page;
-        this.size = options.paginate?.size;
-      }
-      if (options.body) {
-        this.payload = options.body;
-      }
-    }
+  private readonly page: number;
+  private readonly size: number;
+  private readonly sort: string;
+  private readonly payload: ContactCreateInput;
+
+  /**
+   * Creates an instance of Contacts service
+   * @param config - Configuration for API authentication
+   * @param options - Optional settings for pagination and contact data
+   */
+  constructor(
+    private readonly config: KairosSMSConfig,
+    options?: ContactsOptions,
+  ) {
+    this.page = options?.paginate?.page ?? this.defaultPage;
+    this.size = options?.paginate?.size ?? this.defaultSize;
+    this.sort = this.defaultSort;
+    this.payload = options?.body ?? this.defaultPayload;
   }
 
   /**
-   * Set the current page to show for the list of contacts
-   * @param page
+   * Creates a new contact
+   * @returns Observable with the created contact
    */
-  setPage(page: number): this {
-    this.page = page;
-    return this;
-  }
-
-  /**
-   * Set the total items to show per page for the list of contacts
-   * @param size
-   */
-  setSize(size: number): this {
-    this.size = size;
-    return this;
-  }
-
-  /**
-   * Get the current page of the paginated items
-   */
-  get currentPage(): number {
-    return this.page;
-  }
-
-  /**
-   * Get the current size of the paginated items
-   */
-  get currentSize(): number {
-    return this.size;
-  }
-  /**
-   * Set the sort order
-   * @param sort [ASC, DESC]
-   */
-  setSort(sort: SORT_ITEMS): this {
-    this.sort = sort?.toUpperCase();
-    return this;
-  }
-
-  /**
-   * Get the list of all contacts paginated by perPage and size
-   */
-  asList(): Observable<IResponse<IPagination<IContacts>>> {
+  public createContact(): Observable<ContactResponse> {
     return Api(this.config)
-      .get(
-        APIEndpoints.GET_CONTACT_LIST.replace('{page}', this.page?.toString())
-          .replace('{size}', this.size?.toString())
-          .replace('{sort}', this.sort),
-      )
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `Paginated list of contacts`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
-          ),
-        ),
-      );
-  }
-
-  /**
-   * Add new contact to your list of contacts on kairos afrika's portal
-   * @param body is optional if passed already in the contacts() constructor
-   * @param body - {name: "", phone: "", dateOfBirth: ""}
-   */
-  create(body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>): Observable<IResponse<IContacts>> {
-    if (!body && !this.payload) {
-      return of(
-        buildSMSResponse(
-          HttpStatusCode.BAD_REQUEST,
-          'Invalid request body passed',
-          { message: 'Request body must be an object' },
-          false,
-        ),
-      );
-    }
-    return Api(this.config)
-      .post(APIEndpoints.CREATE_CONTACT_DETAILS, {
-        ...(body ? body : this.payload),
-      })
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact created successfully`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
-          ),
-        ),
-      );
-  }
-
-  /**
-   * Get the details of a particular contact
-   * @param contactId id of the contact to get the details
-   * @returns an observable or promise of the contact details
-   */
-  details(contactId: number): Observable<IResponse<IContacts>> {
-    return Api(this.config)
-      .get(APIEndpoints.GET_CONTACT_DETAILS.replace('{id}', contactId as unknown as string))
-      .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact details`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
-          ),
-        ),
-      );
-  }
-
-  /**
-   * Update the contact details
-   * @param contactId - id of the contact to be updated
-   * @param body - payload of the contact to be updated
-   * @returns an observable or promise of the updated contact details
-   */
-  update(
-    contactId: number,
-    body?: Pick<IContacts, 'name' | 'phone' | 'dateOfBirth'>,
-  ): Observable<IResponse<IContacts>> {
-    if (!body && !this.payload) {
-      return of(
-        buildSMSResponse(
-          HttpStatusCode.BAD_REQUEST,
-          'Invalid request body passed',
-          { message: 'Request body must be an object' },
-          false,
-        ),
-      );
-    }
-
-    return Api(this.config)
-      .put(APIEndpoints.UPDATE_CONTACT_DETAILS.replace('{id}', contactId as unknown as string), {
-        ...(body ? body : this.payload),
-      })
+      .post(APIEndpoints.CREATE_CONTACT, this.payload)
       .pipe(
         map((response) =>
-          buildSMSResponse(HttpStatusCode.OK, `Contact details updated successfully`, response?.data, true),
-        ),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
+          buildSMSResponse<Contact>(
+            HttpStatusCode.CREATED,
+            'Contact created successfully',
+            response?.data,
+            true,
           ),
         ),
+        catchError((error) => this.handleError<Contact>(error)),
       );
   }
 
   /**
-   * Delete a contact details
-   * @param contactId - id of the contact to be deleted
-   * @returns an observable or a promise of the deleted contact
+   * Retrieves all contacts with pagination
+   * @returns Observable with paginated contacts
    */
-  delete(contactId: number): Observable<IResponse<IContacts>> {
+  public getContacts(): Observable<ContactsListResponse> {
+    const params = new URLSearchParams({
+      page: this.page.toString(),
+      size: this.size.toString(),
+      sort: this.sort,
+    });
+
     return Api(this.config)
-      .delete(APIEndpoints.DELETE_CONTACT_DETAILS.replace('{id}', contactId as unknown as string))
+      .get(`${APIEndpoints.GET_CONTACTS}?${params.toString()}`)
       .pipe(
-        map((response) => buildSMSResponse(HttpStatusCode.OK, `Contact deleted successfully`, response?.data, true)),
-        catchError((err) =>
-          of(
-            buildSMSResponse(
-              err.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
-              err?.response?.data?.message,
-              err,
-              false,
-            ),
+        map((response) =>
+          buildSMSResponse<ContactPaginatedResponse>(
+            HttpStatusCode.OK,
+            'Contacts retrieved successfully',
+            response?.data,
+            true,
           ),
         ),
+        catchError((error) => this.handleError<ContactPaginatedResponse>(error)),
       );
+  }
+
+  /**
+   * Updates an existing contact
+   * @param contactId - ID of the contact to update
+   * @returns Observable with the updated contact
+   */
+  public updateContact(contactId: string): Observable<ContactResponse> {
+    return Api(this.config)
+      .patch(APIEndpoints.UPDATE_CONTACT.replace('{id}', contactId), this.payload)
+      .pipe(
+        map((response) =>
+          buildSMSResponse<Contact>(
+            HttpStatusCode.OK,
+            'Contact updated successfully',
+            response?.data,
+            true,
+          ),
+        ),
+        catchError((error) => this.handleError<Contact>(error)),
+      );
+  }
+
+  /**
+   * Deletes a contact
+   * @param contactId - ID of the contact to delete
+   * @returns Observable with the deletion result
+   */
+  public deleteContact(contactId: string): Observable<ContactResponse> {
+    return Api(this.config)
+      .delete(APIEndpoints.DELETE_CONTACT.replace('{id}', contactId))
+      .pipe(
+        map((response) =>
+          buildSMSResponse<Contact>(
+            HttpStatusCode.OK,
+            'Contact deleted successfully',
+            response?.data,
+            true,
+          ),
+        ),
+        catchError((error) => this.handleError<Contact>(error)),
+      );
+  }
+
+  /**
+   * Handles API errors
+   * @param error - Error from the API
+   * @returns Observable with error response
+   */
+  private handleError<T>(error: any): Observable<ApiResponse<T>> {
+    return of(
+      buildSMSResponse<T>(
+        error?.response?.status ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+        error?.response?.data?.message ?? 'Operation failed',
+        error,
+        false,
+      ),
+    );
   }
 }
