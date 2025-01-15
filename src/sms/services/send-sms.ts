@@ -5,6 +5,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { buildSMSResponse } from '../utils/helpers';
 import { HttpStatusCode } from '../constants/http-status-code.constants';
 
+// This class is called SendSms
+
 class SendSms {
   /**
    * API call x-access-token and x-access-secret configurations here
