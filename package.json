@@ -1,14 +1,14 @@
 {
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "codecov": "^3.8.3",
     "jest": "^27.5.1",
     "prettier": "^2.6.2",
+    "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^4.6.3",
-    "@types/jest": "^27.4.1",
-    "ts-jest": "^27.1.4"
+    "typescript": "^4.6.3"
   },
   "name": "@kairosafrika/sms",
   "description": "A Observable-based wrapper implementation that exposes all of Kairos' SMS APIs making integration into your backend for sending SMS easier and faster",
