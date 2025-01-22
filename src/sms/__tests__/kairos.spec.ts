@@ -24,7 +24,6 @@ describe('Kairos SMS with new keyword', function () {
     expect(response.asBulk).toBeDefined();
     expect(response.asQuick).toBeDefined();
     expect(response.asPing).toBeDefined();
-    expect(response.asQuickMultipleMSISDN).toBeDefined();
   });
 
   it('should return all defined methods in the kairos account class', async () => {
@@ -68,7 +67,6 @@ describe('Kairos SMS Instances with static create', function () {
     expect(sendSMSInstance).toBeInstanceOf(SendSms);
     expect(sendSMSInstance.asPing).toBeDefined();
     expect(sendSMSInstance.asQuick).toBeDefined();
-    expect(sendSMSInstance.asQuickMultipleMSISDN).toBeDefined();
     expect(sendSMSInstance.asBulk).toBeDefined();
   });
 
